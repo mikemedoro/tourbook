@@ -83,13 +83,11 @@ export default async function ProfilePage({ params }: Props) {
             .eq("following_id", profile.id)
             .single()
         : Promise.resolve({ data: null }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase as any)
+      supabase
         .from("follows")
         .select("profiles!following_id(id, username, display_name, avatar_url)")
         .eq("follower_id", profile.id),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (supabase as any)
+      supabase
         .from("follows")
         .select("profiles!follower_id(id, username, display_name, avatar_url)")
         .eq("following_id", profile.id),

@@ -101,8 +101,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
 
   async function handleDelete() {
     setDeleting(true)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase as any).from("shows").delete().eq("id", show.id)
+    const { error } = await supabase.from("shows").delete().eq("id", show.id)
     if (error) {
       toast.error("Failed to delete show.")
       setDeleting(false)
@@ -121,8 +120,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
       toast.error("Failed to delete photo")
       return
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabase as any).from("show_photos").delete().eq("id", photo.id)
+    await supabase.from("show_photos").delete().eq("id", photo.id)
     setExistingPhotos((prev) => prev.filter((p) => p.id !== photo.id))
   }
 
@@ -134,11 +132,9 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
 
   async function onSubmit(values: FormValues) {
       setSaving(true)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const db = supabase as any
 
       try {
-        const { error: showError } = await db
+        const { error: showError } = await supabase
           .from("shows")
           .update({
             show_date: values.show_date,
@@ -158,7 +154,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
         for (const song of show.setlist_songs) {
           const isHighlighted = highlighted.has(song.id)
           if (isHighlighted !== song.is_highlighted) {
-            await db
+            await supabase
               .from("setlist_songs")
               .update({ is_highlighted: isHighlighted })
               .eq("id", song.id)
@@ -176,7 +172,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
             else paths.push(path)
           }
           if (paths.length > 0) {
-            await db.from("show_photos").insert(paths.map((p: string) => ({ show_id: show.id, storage_path: p })))
+            await supabase.from("show_photos").insert(paths.map((p) => ({ show_id: show.id, storage_path: p })))
           }
         }
 

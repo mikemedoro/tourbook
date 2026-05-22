@@ -198,14 +198,9 @@ export function LogShowForm({ userId }: LogShowFormProps) {
 
       setSaving(true)
 
-      // Use `any` cast here because hand-rolled DB types have limited mutation inference.
-      // Run `supabase gen types` to replace types/database.ts with fully auto-generated types.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const db = supabase as any
-
       try {
         // Insert show
-        const { data: show, error: showError } = await db
+        const { data: show, error: showError } = await supabase
           .from("shows")
           .insert({
             user_id: userId,
@@ -238,15 +233,15 @@ export function LogShowForm({ userId }: LogShowFormProps) {
             is_encore: song.isEncore,
             is_highlighted: highlighted.has(song.name),
           }))
-          await db.from("setlist_songs").insert(songRows)
+          await supabase.from("setlist_songs").insert(songRows)
         }
 
         // Upload photos
         if (photos.length > 0) {
           const paths = await uploadPhotos(show.id)
           if (paths.length > 0) {
-            await db.from("show_photos").insert(
-              paths.map((path: string) => ({ show_id: show.id, storage_path: path }))
+            await supabase.from("show_photos").insert(
+              paths.map((path) => ({ show_id: show.id, storage_path: path }))
             )
           }
         }

@@ -44,8 +44,7 @@ export function ProfileHeader({
     setLoading(true)
 
     if (following) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
+      await supabase
         .from("follows")
         .delete()
         .eq("follower_id", currentUserId)
@@ -53,8 +52,7 @@ export function ProfileHeader({
       setFollowing(false)
       toast.success(`Unfollowed ${profile.username}`)
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
+      await supabase
         .from("follows")
         .insert({ follower_id: currentUserId, following_id: profile.id })
       setFollowing(true)

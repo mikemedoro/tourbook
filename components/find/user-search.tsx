@@ -72,8 +72,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
     const isFollowing = following.has(userId)
 
     if (isFollowing) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("follows")
         .delete()
         .eq("follower_id", currentUserId)
@@ -83,8 +82,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
         toast.success(`Unfollowed @${username}`)
       }
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from("follows")
         .insert({ follower_id: currentUserId, following_id: userId })
       if (!error) {

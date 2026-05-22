@@ -6,175 +6,14 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          id: string
-          username: string
-          display_name: string | null
-          avatar_url: string | null
-          bio: string | null
-          is_public: boolean
-          created_at: string
-        }
-        Insert: {
-          id: string
-          username: string
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          is_public?: boolean
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          username?: string
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          is_public?: boolean
-          created_at?: string
-        }
-      }
-      shows: {
-        Row: {
-          id: string
-          user_id: string
-          artist_name: string
-          artist_mbid: string | null
-          artist_setlistfm_id: string | null
-          venue_name: string
-          venue_city: string
-          venue_state: string | null
-          venue_country: string
-          venue_lat: number | null
-          venue_lng: number | null
-          show_date: string
-          setlist_id: string | null
-          overall_rating: number | null
-          sound_rating: number | null
-          crowd_rating: number | null
-          setlist_rating: number | null
-          venue_rating: number | null
-          other_acts: string | null
-          notes: string | null
-          is_public: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          artist_name: string
-          artist_mbid?: string | null
-          artist_setlistfm_id?: string | null
-          venue_name: string
-          venue_city: string
-          venue_state?: string | null
-          venue_country: string
-          venue_lat?: number | null
-          venue_lng?: number | null
-          show_date: string
-          setlist_id?: string | null
-          overall_rating?: number | null
-          sound_rating?: number | null
-          crowd_rating?: number | null
-          setlist_rating?: number | null
-          venue_rating?: number | null
-          other_acts?: string | null
-          notes?: string | null
-          is_public?: boolean
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          artist_name?: string
-          artist_mbid?: string | null
-          artist_setlistfm_id?: string | null
-          venue_name?: string
-          venue_city?: string
-          venue_state?: string | null
-          venue_country?: string
-          venue_lat?: number | null
-          venue_lng?: number | null
-          show_date?: string
-          setlist_id?: string | null
-          overall_rating?: number | null
-          sound_rating?: number | null
-          crowd_rating?: number | null
-          setlist_rating?: number | null
-          venue_rating?: number | null
-          other_acts?: string | null
-          notes?: string | null
-          is_public?: boolean
-          created_at?: string
-        }
-      }
-      setlist_songs: {
-        Row: {
-          id: string
-          show_id: string
-          song_name: string
-          position: number
-          is_encore: boolean
-          is_highlighted: boolean
-        }
-        Insert: {
-          id?: string
-          show_id: string
-          song_name: string
-          position: number
-          is_encore?: boolean
-          is_highlighted?: boolean
-        }
-        Update: {
-          id?: string
-          show_id?: string
-          song_name?: string
-          position?: number
-          is_encore?: boolean
-          is_highlighted?: boolean
-        }
-      }
-      show_photos: {
-        Row: {
-          id: string
-          show_id: string
-          storage_path: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          show_id: string
-          storage_path: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          show_id?: string
-          storage_path?: string
-          created_at?: string
-        }
-      }
-      follows: {
-        Row: {
-          follower_id: string
-          following_id: string
-          created_at: string
-        }
-        Insert: {
-          follower_id: string
-          following_id: string
-          created_at?: string
-        }
-        Update: {
-          follower_id?: string
-          following_id?: string
-          created_at?: string
-        }
-      }
       artist_genres: {
         Row: {
           artist_mbid: string
@@ -194,6 +33,217 @@ export interface Database {
           genres?: string[]
           updated_at?: string
         }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          is_public: boolean
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          is_public?: boolean
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_public?: boolean
+          username?: string
+        }
+        Relationships: []
+      }
+      setlist_songs: {
+        Row: {
+          id: string
+          is_encore: boolean
+          is_highlighted: boolean
+          position: number
+          show_id: string
+          song_name: string
+        }
+        Insert: {
+          id?: string
+          is_encore?: boolean
+          is_highlighted?: boolean
+          position: number
+          show_id: string
+          song_name: string
+        }
+        Update: {
+          id?: string
+          is_encore?: boolean
+          is_highlighted?: boolean
+          position?: number
+          show_id?: string
+          song_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "setlist_songs_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      show_photos: {
+        Row: {
+          created_at: string
+          id: string
+          show_id: string
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          show_id: string
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          show_id?: string
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "show_photos_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shows: {
+        Row: {
+          artist_mbid: string | null
+          artist_name: string
+          artist_setlistfm_id: string | null
+          created_at: string
+          crowd_rating: number | null
+          id: string
+          is_public: boolean
+          notes: string | null
+          other_acts: string | null
+          overall_rating: number | null
+          setlist_id: string | null
+          setlist_rating: number | null
+          show_date: string
+          sound_rating: number | null
+          user_id: string
+          venue_city: string
+          venue_country: string
+          venue_lat: number | null
+          venue_lng: number | null
+          venue_name: string
+          venue_rating: number | null
+          venue_state: string | null
+        }
+        Insert: {
+          artist_mbid?: string | null
+          artist_name: string
+          artist_setlistfm_id?: string | null
+          created_at?: string
+          crowd_rating?: number | null
+          id?: string
+          is_public?: boolean
+          notes?: string | null
+          other_acts?: string | null
+          overall_rating?: number | null
+          setlist_id?: string | null
+          setlist_rating?: number | null
+          show_date: string
+          sound_rating?: number | null
+          user_id: string
+          venue_city: string
+          venue_country: string
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name: string
+          venue_rating?: number | null
+          venue_state?: string | null
+        }
+        Update: {
+          artist_mbid?: string | null
+          artist_name?: string
+          artist_setlistfm_id?: string | null
+          created_at?: string
+          crowd_rating?: number | null
+          id?: string
+          is_public?: boolean
+          notes?: string | null
+          other_acts?: string | null
+          overall_rating?: number | null
+          setlist_id?: string | null
+          setlist_rating?: number | null
+          show_date?: string
+          sound_rating?: number | null
+          user_id?: string
+          venue_city?: string
+          venue_country?: string
+          venue_lat?: number | null
+          venue_lng?: number | null
+          venue_name?: string
+          venue_rating?: number | null
+          venue_state?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shows_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -211,16 +261,138 @@ export interface Database {
   }
 }
 
-// Convenience types
-export type Profile = Database['public']['Tables']['profiles']['Row']
-export type Show = Database['public']['Tables']['shows']['Row']
-export type SetlistSong = Database['public']['Tables']['setlist_songs']['Row']
-export type ShowPhoto = Database['public']['Tables']['show_photos']['Row']
-export type Follow = Database['public']['Tables']['follows']['Row']
-export type ArtistGenre = Database['public']['Tables']['artist_genres']['Row']
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+// ============================================================
+// Convenience aliases used throughout the app
+// ============================================================
+export type Profile = Tables<"profiles">
+export type Show = Tables<"shows">
+export type SetlistSong = Tables<"setlist_songs">
+export type ShowPhoto = Tables<"show_photos">
 export type ShowWithSongs = Show & {
   setlist_songs: SetlistSong[]
   show_photos: ShowPhoto[]
-  profiles: Pick<Profile, 'username' | 'avatar_url'>
+  profiles: Pick<Profile, "username" | "avatar_url">
 }
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

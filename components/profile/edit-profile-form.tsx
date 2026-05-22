@@ -46,8 +46,7 @@ export function EditProfileForm({ profile }: EditProfileFormProps) {
 
   async function onSubmit(values: FormValues) {
     setSaving(true)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from("profiles")
       .update({
         display_name: values.display_name || null,
