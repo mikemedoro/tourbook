@@ -233,7 +233,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
                     type="button"
                     onClick={() => toggleHighlight(song.id)}
                   >
-                    <Badge variant={highlighted.has(song.id) ? "default" : "outline"} className="max-w-[300px]">
+                    <Badge variant={highlighted.has(song.id) ? "default" : "outline"} className="max-w-75">
                       <span className="truncate min-w-0">{song.song_name}</span>
                     </Badge>
                   </button>
