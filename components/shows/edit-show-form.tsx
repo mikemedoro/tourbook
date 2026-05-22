@@ -171,7 +171,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
         setSaving(false)
       }
     },
-    [overallRating, soundRating, crowdRating, setlistRating, venueRating, highlighted, show, supabase, router, username]
+    [overallRating, soundRating, crowdRating, setlistRating, venueRating, highlighted, newPhotoFiles, show, supabase, router, username]
   )
 
   const ratings: [string, number, (v: number) => void][] = [

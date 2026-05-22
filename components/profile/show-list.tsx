@@ -73,7 +73,7 @@ export function ShowList({ shows, emptyMessage = "No shows yet.", isOwner = fals
                     Highlights:
                   </span>
                   {highlights.map((s) => (
-                    <Badge key={s.id} variant="secondary" className="text-xs max-w-[300px]">
+                    <Badge key={s.id} variant="secondary" className="text-xs max-w-75">
                       <span className="truncate min-w-0">{s.song_name}</span>
                     </Badge>
                   ))}

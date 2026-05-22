@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Instrument_Sans, Figtree } from "next/font/google"
+import { Geist, Figtree } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils";

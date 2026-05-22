@@ -4,6 +4,7 @@ import { ProfileHeader } from "@/components/profile/profile-header"
 import { ProfileStats } from "@/components/profile/profile-stats"
 import { ShowList } from "@/components/profile/show-list"
 import { PaginatedShowList } from "@/components/profile/paginated-show-list"
+import { FriendsDialog } from "@/components/profile/friends-dialog"
 import { VenueMap } from "@/components/map/venue-map"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Profile, Show, SetlistSong, ShowPhoto } from "@/types/database"
@@ -69,7 +70,7 @@ export default async function ProfilePage({ params }: Props) {
     firstPageQuery = firstPageQuery.eq("is_public", true)
   }
 
-  const [{ data: rawStats }, { data: rawTop }, { data: rawFirstPage }, followResult] =
+  const [{ data: rawStats }, { data: rawTop }, { data: rawFirstPage }, followResult, { data: rawFollowing }, { data: rawFollowers }] =
     await Promise.all([
       statsQuery,
       topQuery,
@@ -82,6 +83,16 @@ export default async function ProfilePage({ params }: Props) {
             .eq("following_id", profile.id)
             .single()
         : Promise.resolve({ data: null }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabase as any)
+        .from("follows")
+        .select("profiles!following_id(id, username, display_name, avatar_url)")
+        .eq("follower_id", profile.id),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (supabase as any)
+        .from("follows")
+        .select("profiles!follower_id(id, username, display_name, avatar_url)")
+        .eq("following_id", profile.id),
     ])
 
   const statsShows = (rawStats as StatShow[] | null) ?? []
@@ -90,6 +101,10 @@ export default async function ProfilePage({ params }: Props) {
   const firstPageShows = allFirstPage.slice(0, PAGE_SIZE)
   const hasMoreShows = allFirstPage.length > PAGE_SIZE
   const isFollowing = !!(followResult as { data: unknown }).data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const following = ((rawFollowing as any[]) ?? []).map((f: any) => f.profiles).filter(Boolean)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const followers = ((rawFollowers as any[]) ?? []).map((f: any) => f.profiles).filter(Boolean)
 
   // Aggregate stats from lightweight query
   const totalShows = statsShows.length
@@ -121,6 +136,8 @@ export default async function ProfilePage({ params }: Props) {
         isFollowing={isFollowing}
         currentUserId={currentUser?.id}
       />
+
+      <FriendsDialog following={following} followers={followers} />
 
       <ProfileStats
         totalShows={totalShows}
