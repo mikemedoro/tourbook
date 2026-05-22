@@ -10,11 +10,12 @@ export default async function OnboardingPage() {
 
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profile } = await (supabase as any)
     .from("profiles")
     .select("username")
     .eq("id", user.id)
-    .single()
+    .single() as { data: { username: string } | null }
 
   // Already has a clean username — nothing to do
   if (profile && !/_[0-9a-f]{8}$/i.test(profile.username)) {
