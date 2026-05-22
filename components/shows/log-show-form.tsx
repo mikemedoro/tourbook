@@ -17,10 +17,11 @@ import { SongHighlighter } from "@/components/shows/song-highlighter"
 import { StarRating } from "@/components/shows/star-rating"
 import { createClient } from "@/lib/supabase/client"
 import { SetlistFmArtist, SetlistFmSetlist } from "@/types/setlistfm"
-import { Loader2 } from "lucide-react"
+import { Loader2, RefreshCw } from "lucide-react"
 
 const schema = z.object({
   show_date: z.string().min(1, "Date is required"),
+  other_acts: z.string().max(500).optional(),
   notes: z.string().max(2000).optional(),
 })
 
@@ -60,6 +61,9 @@ export function LogShowForm({ userId }: LogShowFormProps) {
   // Photos
   const [photos, setPhotos] = useState<File[]>([])
 
+  // Other acts auto-fetch state
+  const [loadingOtherActs, setLoadingOtherActs] = useState(false)
+
   // Submission state
   const [saving, setSaving] = useState(false)
 
@@ -70,7 +74,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { show_date: "", notes: "" },
+    defaultValues: { show_date: "", other_acts: "", notes: "" },
   })
 
   function handleArtistSelect(artist: SetlistFmArtist) {
@@ -96,6 +100,9 @@ export function LogShowForm({ userId }: LogShowFormProps) {
     }
     setSongs(flat)
     setHighlighted(new Set())
+
+    // Auto-fetch other acts (other artists at the same venue on the same date)
+    fetchOtherActs(setlist.venue.id, setlist.eventDate, setlist.artist.name)
 
     // Geocode the venue via server-side Nominatim proxy for precise coordinates
     if (setlist.venue.name) {
@@ -124,6 +131,21 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       }
       return next
     })
+  }
+
+  function fetchOtherActs(venueId: string, date: string, excludeArtist: string) {
+    setLoadingOtherActs(true)
+    fetch(
+      `/api/setlistfm/venue-setlists?venueId=${venueId}&date=${date}&exclude=${encodeURIComponent(excludeArtist)}`
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.other_acts?.length > 0) {
+          setValue("other_acts", data.other_acts.join(", "))
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingOtherActs(false))
   }
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -198,6 +220,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
             setlist_rating: setlistRating || null,
             venue_rating: venueRating || null,
             notes: values.notes ?? null,
+            other_acts: values.other_acts?.trim() || null,
           })
           .select("id")
           .single()
@@ -334,6 +357,38 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       </div>
 
       <Separator />
+
+      {/* Other acts */}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="other_acts">Other acts</Label>
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Input
+              id="other_acts"
+              placeholder="e.g. Wet Leg, Fontaines D.C."
+              {...register("other_acts")}
+            />
+            {loadingOtherActs && (
+              <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            )}
+          </div>
+          {selectedSetlist && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              disabled={loadingOtherActs}
+              onClick={() => fetchOtherActs(selectedSetlist.venue.id, selectedSetlist.eventDate, selectedSetlist.artist.name)}
+              title="Re-fetch other acts from Setlist.fm"
+            >
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Auto-filled from Setlist.fm when available. Edit as needed.
+        </p>
+      </div>
 
       {/* Notes */}
       <div className="flex flex-col gap-1.5">

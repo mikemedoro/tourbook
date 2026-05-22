@@ -57,6 +57,22 @@ export async function getSetlist(setlistId: string) {
   return res.json() as Promise<SetlistFmSetlist>
 }
 
+export async function getVenueSetlists(venueId: string, date: string) {
+  // date is in DD-MM-YYYY format (matches setlist.eventDate)
+  const params = new URLSearchParams({ venueId, date, p: "1" })
+  const res = await fetch(`${BASE_URL}/search/setlists?${params}`, {
+    headers: headers(),
+    next: { revalidate: 3600 },
+  })
+
+  if (!res.ok) {
+    if (res.status === 404) return { setlist: [], total: 0, itemsPerPage: 20, page: 1 }
+    throw new Error(`Setlist.fm venue setlists failed: ${res.status}`)
+  }
+
+  return res.json() as Promise<SetlistFmSetlistSearchResponse>
+}
+
 export async function searchSetlists(params: {
   artistName?: string
   cityName?: string

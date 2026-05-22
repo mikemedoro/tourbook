@@ -10,6 +10,20 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
+      // Check if this user has an auto-generated username (OAuth signup without username choice)
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("username")
+          .eq("id", user.id)
+          .single()
+
+        // Auto-generated usernames end with _[8 hex chars] from the UUID
+        if (profile?.username && /_[0-9a-f]{8}$/i.test(profile.username)) {
+          return NextResponse.redirect(`${origin}/onboarding`)
+        }
+      }
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

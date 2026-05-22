@@ -58,6 +58,7 @@ export interface Database {
           crowd_rating: number | null
           setlist_rating: number | null
           venue_rating: number | null
+          other_acts: string | null
           notes: string | null
           is_public: boolean
           created_at: string
@@ -81,6 +82,7 @@ export interface Database {
           crowd_rating?: number | null
           setlist_rating?: number | null
           venue_rating?: number | null
+          other_acts?: string | null
           notes?: string | null
           is_public?: boolean
           created_at?: string
@@ -104,6 +106,7 @@ export interface Database {
           crowd_rating?: number | null
           setlist_rating?: number | null
           venue_rating?: number | null
+          other_acts?: string | null
           notes?: string | null
           is_public?: boolean
           created_at?: string

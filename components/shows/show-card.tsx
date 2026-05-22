@@ -48,6 +48,9 @@ export function ShowCard({ show }: ShowCardProps) {
 
             <div className="mt-1">
               <h3 className="font-semibold text-base">{show.artist_name}</h3>
+              {show.other_acts && (
+                <p className="text-xs text-muted-foreground">with {show.other_acts}</p>
+              )}
               <div className="flex items-center gap-3 text-sm text-muted-foreground mt-0.5">
                 <span className="flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />

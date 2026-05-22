@@ -35,6 +35,9 @@ export function ShowList({ shows, emptyMessage = "No shows yet.", isOwner = fals
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-lg font-semibold">{show.artist_name}</p>
+                  {show.other_acts && (
+                    <p className="text-xs text-muted-foreground">with {show.other_acts}</p>
+                  )}
                   <div className="flex items-center gap-3 text-sm text-muted-foreground mt-0.5">
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5" />

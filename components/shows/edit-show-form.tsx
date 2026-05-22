@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/shows/star-rating"
 import { createClient } from "@/lib/supabase/client"
 import { Show, SetlistSong, ShowPhoto } from "@/types/database"
-import { Loader2, MapPin, Trash2, X } from "lucide-react"
+import { Loader2, MapPin, RefreshCw, Trash2, X } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +31,7 @@ import {
 
 const schema = z.object({
   show_date: z.string().min(1, "Date is required"),
+  other_acts: z.string().max(500).optional(),
   notes: z.string().max(2000).optional(),
 })
 
@@ -59,18 +60,35 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
   const [venueRating, setVenueRating] = useState(show.venue_rating ?? 0)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [loadingOtherActs, setLoadingOtherActs] = useState(false)
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       show_date: show.show_date,
+      other_acts: show.other_acts ?? "",
       notes: show.notes ?? "",
     },
   })
+
+  function fetchOtherActs() {
+    if (!show.setlist_id) return
+    setLoadingOtherActs(true)
+    fetch(
+      `/api/setlistfm/venue-setlists?setlistId=${show.setlist_id}&exclude=${encodeURIComponent(show.artist_name)}`
+    )
+      .then((r) => r.json())
+      .then((data: { other_acts: string[] }) => {
+        setValue("other_acts", data.other_acts.join(", "))
+      })
+      .catch(() => {})
+      .finally(() => setLoadingOtherActs(false))
+  }
 
   function toggleHighlight(songId: string) {
     setHighlighted((prev) => {
@@ -114,8 +132,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
     setNewPhotoFiles(Array.from(e.target.files).slice(0, slots))
   }
 
-  const onSubmit = useCallback(
-    async (values: FormValues) => {
+  async function onSubmit(values: FormValues) {
       setSaving(true)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const db = supabase as any
@@ -131,6 +148,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
             setlist_rating: setlistRating || null,
             venue_rating: venueRating || null,
             notes: values.notes || null,
+            other_acts: values.other_acts?.trim() || null,
           })
           .eq("id", show.id)
 
@@ -170,9 +188,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
       } finally {
         setSaving(false)
       }
-    },
-    [overallRating, soundRating, crowdRating, setlistRating, venueRating, highlighted, newPhotoFiles, show, supabase, router, username]
-  )
+  }
 
   const ratings: [string, number, (v: number) => void][] = [
     ["Overall", overallRating, setOverallRating],
@@ -257,6 +273,33 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
           placeholder="How was the show?"
           {...register("notes")}
         />
+      </div>
+
+      <Separator />
+
+      {/* Other acts */}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="other_acts">Other acts</Label>
+        <div className="flex gap-2">
+          <Input
+            id="other_acts"
+            placeholder="e.g. Wet Leg, Fontaines D.C."
+            {...register("other_acts")}
+          />
+          {show.setlist_id && (
+            <button
+              type="button"
+              onClick={fetchOtherActs}
+              disabled={loadingOtherActs}
+              className="shrink-0 flex items-center justify-center rounded-md border px-2.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+              title="Fetch other acts from Setlist.fm"
+            >
+              {loadingOtherActs
+                ? <Loader2 className="h-4 w-4 animate-spin" />
+                : <RefreshCw className="h-4 w-4" />}
+            </button>
+          )}
+        </div>
       </div>
 
       <Separator />

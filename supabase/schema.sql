@@ -41,10 +41,15 @@ CREATE TABLE shows (
   crowd_rating          SMALLINT CHECK (crowd_rating BETWEEN 1 AND 5),
   setlist_rating        SMALLINT CHECK (setlist_rating BETWEEN 1 AND 5),
   venue_rating          SMALLINT CHECK (venue_rating BETWEEN 1 AND 5),
+  other_acts            TEXT,                  -- Other acts on the bill (free text, optionally auto-filled)
   notes                 TEXT,
   is_public             BOOLEAN NOT NULL DEFAULT true,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Migration for existing databases:
+-- ALTER TABLE shows ADD COLUMN other_acts TEXT;
+-- Or if you already ran the previous migration: ALTER TABLE shows RENAME COLUMN openers TO other_acts;
 
 -- Songs from a show's setlist
 CREATE TABLE setlist_songs (
