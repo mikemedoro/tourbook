@@ -360,7 +360,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
           <div className="relative flex-1">
             <Input
               id="other_acts"
-              placeholder="e.g. Wet Leg, Fontaines D.C."
+              placeholder="e.g. Pixies, Oasis"
               {...register("other_acts")}
             />
             {loadingOtherActs && (

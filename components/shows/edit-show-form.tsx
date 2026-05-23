@@ -279,7 +279,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
         <div className="flex gap-2">
           <Input
             id="other_acts"
-            placeholder="e.g. Wet Leg, Fontaines D.C."
+            placeholder="e.g. Pixies, Oasis"
             {...register("other_acts")}
           />
           {show.setlist_id && (
