@@ -15,7 +15,7 @@ export function ProfileStats({
   showsThisYear,
 }: ProfileStatsProps) {
   const stats = [
-    { label: "Shows", value: totalShows, icon: Trophy },
+    { label: "Total Shows", value: totalShows, icon: Trophy },
     { label: `Shows ${new Date().getFullYear()}`, value: showsThisYear, icon: Calendar },
     { label: "Cities", value: uniqueCities, icon: Globe },
     { label: "Venues", value: uniqueVenues, icon: MapPin },

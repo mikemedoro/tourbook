@@ -7,6 +7,19 @@ const PAGE_SIZE = 20
 
 type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
 
+export async function markNotificationsRead() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase
+    .from("notifications")
+    .update({ read: true })
+    .eq("user_id", user.id)
+    .eq("read", false)
+}
+
 export async function loadMoreFeedShows(
   offset: number
 ): Promise<{ shows: ShowWithSongs[]; hasMore: boolean }> {

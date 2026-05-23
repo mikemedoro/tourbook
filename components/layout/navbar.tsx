@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Music, PlusCircle, LogOut, User, Settings, Search } from "lucide-react"
+import { Music, PlusCircle, LogOut, User, Settings, Search, Bell } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -22,9 +22,10 @@ interface NavbarProps {
     display_name: string | null
     avatar_url: string | null
   } | null
+  unreadNotifications?: number
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -50,9 +51,21 @@ export function Navbar({ user }: NavbarProps) {
       </Link>
 
       <div className="flex items-center gap-3">
-        <Link href="/find" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Find people">
-          <Search className="h-4 w-4" />
-        </Link>
+        <div className="flex items-center">
+          <Link href="/find" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Find people">
+            <Search className="h-4 w-4" />
+          </Link>
+          <Link href="/notifications" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Notifications">
+            <span className="relative">
+              <Bell className="h-4 w-4" />
+              {unreadNotifications > 0 && (
+                <span className="absolute -top-2 -right-2.5 h-4 min-w-4 rounded-full bg-destructive text-[10px] text-white flex items-center justify-center px-0.5 leading-none">
+                  {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                </span>
+              )}
+            </span>
+          </Link>
+        </div>
         <Link href="/log-show" className={buttonVariants({ size: "sm" })}>
           <PlusCircle className="h-4 w-4 mr-1.5" />
           Log show

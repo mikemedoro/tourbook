@@ -12,15 +12,21 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase
+  const { data: profile, } = await supabase
     .from("profiles")
     .select("username, display_name, avatar_url")
     .eq("id", user.id)
     .single()
 
+  const { count: unreadNotifications } = await supabase
+    .from("notifications")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("read", false)
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar user={profile} />
+      <Navbar user={profile} unreadNotifications={unreadNotifications ?? 0} />
       <main className="flex-1 container max-w-4xl mx-auto px-4 py-12">{children}</main>
     </div>
   )
