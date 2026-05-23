@@ -75,6 +75,7 @@ export async function getVenueSetlists(venueId: string, date: string) {
 
 export async function searchSetlists(params: {
   artistName?: string
+  artistMbid?: string
   cityName?: string
   year?: number
   venueName?: string
@@ -82,6 +83,7 @@ export async function searchSetlists(params: {
 }) {
   const query = new URLSearchParams()
   if (params.artistName) query.set("artistName", params.artistName)
+  if (params.artistMbid) query.set("artistMbid", params.artistMbid)
   if (params.cityName) query.set("cityName", params.cityName)
   if (params.year) query.set("year", String(params.year))
   if (params.venueName) query.set("venueName", params.venueName)
