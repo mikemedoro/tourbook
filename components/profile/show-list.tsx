@@ -21,7 +21,6 @@ export function ShowList({ shows, emptyMessage = "No shows yet.", isOwner = fals
     <div className="flex flex-col divide-y">
       {shows.map((show, i) => {
         const displayDate = new Date(show.show_date + "T12:00:00")
-        const highlights = show.setlist_songs.filter((s) => s.is_highlighted)
 
         return (
           <div key={show.id} className="py-4 flex items-start gap-3">
@@ -30,15 +29,13 @@ export function ShowList({ shows, emptyMessage = "No shows yet.", isOwner = fals
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-start gap-3">
-                <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-lg font-semibold">{show.artist_name}</p>
                   {show.other_acts && (
-                    <p className="text-xs text-muted-foreground">with {show.other_acts}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">with {show.other_acts}</p>
                   )}
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground mt-0.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1.5 text-sm text-muted-foreground mt-2">
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5" />
                       {show.venue_name}, {show.venue_city}
@@ -66,22 +63,6 @@ export function ShowList({ shows, emptyMessage = "No shows yet.", isOwner = fals
                       <Pencil className="h-3.5 w-3.5" />
                     </Link>
                   )}
-                </div>
-              </div>
-
-              {highlights.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-4">
-                  <span className="text-xs text-muted-foreground mr-1 self-center">
-                    <Star className="h-3 w-3 inline fill-yellow-400 stroke-yellow-400 mr-0.5" />
-                    Highlights:
-                  </span>
-                  {highlights.map((s) => (
-                    <Badge key={s.id} variant="secondary" className="text-xs max-w-75">
-                      <span className="truncate min-w-0">{s.song_name}</span>
-                    </Badge>
-                  ))}
-                </div>
-              )}
                 </div>
               </div>
             </div>
