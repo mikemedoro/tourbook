@@ -1,24 +1,24 @@
-import { Music, MapPin, Trophy, Calendar } from "lucide-react"
+import { Globe, MapPin, Trophy, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface ProfileStatsProps {
   totalShows: number
-  uniqueArtists: number
+  uniqueCities: number
   uniqueVenues: number
   showsThisYear: number
 }
 
 export function ProfileStats({
   totalShows,
-  uniqueArtists,
+  uniqueCities,
   uniqueVenues,
   showsThisYear,
 }: ProfileStatsProps) {
   const stats = [
     { label: "Shows", value: totalShows, icon: Trophy },
-    { label: "Artists", value: uniqueArtists, icon: Music },
-    { label: "Venues", value: uniqueVenues, icon: MapPin },
     { label: `Shows ${new Date().getFullYear()}`, value: showsThisYear, icon: Calendar },
+    { label: "Cities", value: uniqueCities, icon: Globe },
+    { label: "Venues", value: uniqueVenues, icon: MapPin },
   ]
 
   return (

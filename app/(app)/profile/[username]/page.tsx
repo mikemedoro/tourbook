@@ -106,7 +106,7 @@ export default async function ProfilePage({ params }: Props) {
 
   // Aggregate stats from lightweight query
   const totalShows = statsShows.length
-  const uniqueArtists = new Set(statsShows.map((s) => s.artist_name)).size
+  const uniqueCities = new Set(statsShows.map((s) => s.venue_city).filter(Boolean)).size
   const uniqueVenues = new Set(statsShows.map((s) => s.venue_name)).size
   const currentYear = new Date().getFullYear()
   const showsThisYear = statsShows.filter(
@@ -139,7 +139,7 @@ export default async function ProfilePage({ params }: Props) {
 
       <ProfileStats
         totalShows={totalShows}
-        uniqueArtists={uniqueArtists}
+        uniqueCities={uniqueCities}
         uniqueVenues={uniqueVenues}
         showsThisYear={showsThisYear}
       />
