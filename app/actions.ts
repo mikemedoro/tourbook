@@ -1,11 +1,9 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { Show, SetlistSong, ShowPhoto, ShowWithSongs } from "@/types/database"
+import { ShowWithRelations, ShowWithSongs } from "@/types/database"
 
 const PAGE_SIZE = 20
-
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
 
 export async function markNotificationsRead() {
   const supabase = await createClient()
@@ -57,7 +55,7 @@ export async function loadMoreFeedShows(
 export async function loadMoreProfileShows(
   offset: number,
   profileId: string
-): Promise<{ shows: ShowFull[]; hasMore: boolean }> {
+): Promise<{ shows: ShowWithRelations[]; hasMore: boolean }> {
   const supabase = await createClient()
   const {
     data: { user },
@@ -76,7 +74,7 @@ export async function loadMoreProfileShows(
   if (!isOwner) query.eq("is_public", true)
 
   const { data } = await query
-  const shows = (data as ShowFull[] | null) ?? []
+  const shows = (data as ShowWithRelations[] | null) ?? []
   return {
     shows: shows.slice(0, PAGE_SIZE),
     hasMore: shows.length > PAGE_SIZE,

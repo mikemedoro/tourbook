@@ -1,9 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { EditShowForm } from "@/components/shows/edit-show-form"
-import { Show, SetlistSong, ShowPhoto } from "@/types/database"
-
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
+import { ShowWithRelations } from "@/types/database"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -25,7 +23,7 @@ export default async function EditShowPage({ params }: Props) {
     .eq("id", id)
     .single()
 
-  const show = rawShow as ShowFull | null
+  const show = rawShow as ShowWithRelations | null
 
   if (!show) notFound()
   if (show.user_id !== user.id) notFound()

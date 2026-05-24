@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { markNotificationsRead } from "@/app/actions"
+import { followUser, unfollowUser } from "@/app/actions/follows"
 import { userAvatarGradient } from "@/lib/utils"
 import { toast } from "sonner"
 
@@ -50,28 +51,18 @@ export function NotificationsList({ notifications, currentUserId }: Notification
     setLoadingId(actorId)
     const isFollowing = following.has(actorId)
 
-    if (isFollowing) {
-      const { error } = await supabase
-        .from("follows")
-        .delete()
-        .eq("follower_id", currentUserId)
-        .eq("following_id", actorId)
-      if (!error) {
-        setFollowing((prev) => {
-          const next = new Set(prev)
-          next.delete(actorId)
-          return next
-        })
-        toast.success(`Unfollowed @${username}`)
-      }
+    const result = isFollowing ? await unfollowUser(actorId) : await followUser(actorId)
+
+    if (result.ok) {
+      setFollowing((prev) => {
+        const next = new Set(prev)
+        if (isFollowing) next.delete(actorId)
+        else next.add(actorId)
+        return next
+      })
+      toast.success(isFollowing ? `Unfollowed @${username}` : `Following @${username}`)
     } else {
-      const { error } = await supabase
-        .from("follows")
-        .insert({ follower_id: currentUserId, following_id: actorId })
-      if (!error) {
-        setFollowing((prev) => new Set(prev).add(actorId))
-        toast.success(`Following @${username}`)
-      }
+      toast.error(result.error)
     }
 
     setLoadingId(null)

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { userAvatarGradient } from "@/lib/utils"
+import { followUser, unfollowUser } from "@/app/actions/follows"
 
 interface UserResult {
   id: string
@@ -71,24 +72,18 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
     setLoadingId(userId)
     const isFollowing = following.has(userId)
 
-    if (isFollowing) {
-      const { error } = await supabase
-        .from("follows")
-        .delete()
-        .eq("follower_id", currentUserId)
-        .eq("following_id", userId)
-      if (!error) {
-        setFollowing((prev) => { const next = new Set(prev); next.delete(userId); return next })
-        toast.success(`Unfollowed @${username}`)
-      }
+    const result = isFollowing ? await unfollowUser(userId) : await followUser(userId)
+
+    if (result.ok) {
+      setFollowing((prev) => {
+        const next = new Set(prev)
+        if (isFollowing) next.delete(userId)
+        else next.add(userId)
+        return next
+      })
+      toast.success(isFollowing ? `Unfollowed @${username}` : `Following @${username}`)
     } else {
-      const { error } = await supabase
-        .from("follows")
-        .insert({ follower_id: currentUserId, following_id: userId })
-      if (!error) {
-        setFollowing((prev) => new Set(prev).add(userId))
-        toast.success(`Following @${username}`)
-      }
+      toast.error(result.error)
     }
     setLoadingId(null)
   }

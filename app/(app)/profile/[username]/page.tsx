@@ -7,9 +7,8 @@ import { PaginatedShowList } from "@/components/profile/paginated-show-list"
 import { FriendsDialog } from "@/components/profile/friends-dialog"
 import { VenueMap } from "@/components/map/venue-map"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Profile, Show, SetlistSong, ShowPhoto } from "@/types/database"
+import { Profile, Show, ShowWithRelations } from "@/types/database"
 
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
 type StatShow = Pick<Show, "id" | "artist_name" | "venue_name" | "venue_city" | "venue_state" | "venue_country" | "venue_lat" | "venue_lng" | "show_date">
 
 const PAGE_SIZE = 20
@@ -94,15 +93,20 @@ export default async function ProfilePage({ params }: Props) {
     ])
 
   const statsShows = (rawStats as StatShow[] | null) ?? []
-  const topShows = (rawTop as ShowFull[] | null) ?? []
-  const allFirstPage = (rawFirstPage as ShowFull[] | null) ?? []
+  const topShows = (rawTop as ShowWithRelations[] | null) ?? []
+  const allFirstPage = (rawFirstPage as ShowWithRelations[] | null) ?? []
   const firstPageShows = allFirstPage.slice(0, PAGE_SIZE)
   const hasMoreShows = allFirstPage.length > PAGE_SIZE
   const isFollowing = !!(followResult as { data: unknown }).data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const following = ((rawFollowing as any[]) ?? []).map((f: any) => f.profiles).filter(Boolean)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const followers = ((rawFollowers as any[]) ?? []).map((f: any) => f.profiles).filter(Boolean)
+  type FollowRelation = {
+    profiles: Pick<Profile, "id" | "username" | "display_name" | "avatar_url"> | null
+  }
+  const following = ((rawFollowing as FollowRelation[] | null) ?? [])
+    .map((f) => f.profiles)
+    .filter((p): p is NonNullable<typeof p> => p !== null)
+  const followers = ((rawFollowers as FollowRelation[] | null) ?? [])
+    .map((f) => f.profiles)
+    .filter((p): p is NonNullable<typeof p> => p !== null)
 
   // Aggregate stats from lightweight query
   const totalShows = statsShows.length

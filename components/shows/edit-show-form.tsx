@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/shows/star-rating"
 import { createClient } from "@/lib/supabase/client"
-import { Show, SetlistSong, ShowPhoto } from "@/types/database"
+import { ShowPhoto, ShowWithRelations } from "@/types/database"
 import { Loader2, MapPin, RefreshCw, Trash2, X } from "lucide-react"
 import {
   AlertDialog,
@@ -37,10 +37,8 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
-
 interface EditShowFormProps {
-  show: ShowFull
+  show: ShowWithRelations
   username: string
 }
 

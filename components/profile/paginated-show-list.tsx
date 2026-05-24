@@ -5,12 +5,10 @@ import { ShowList } from "@/components/profile/show-list"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { loadMoreProfileShows } from "@/app/actions"
-import { Show, SetlistSong, ShowPhoto } from "@/types/database"
-
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
+import { ShowWithRelations } from "@/types/database"
 
 interface PaginatedShowListProps {
-  initialShows: ShowFull[]
+  initialShows: ShowWithRelations[]
   initialHasMore: boolean
   profileId: string
   emptyMessage?: string

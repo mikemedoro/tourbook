@@ -428,9 +428,11 @@ export type Profile = Tables<"profiles">
 export type Show = Tables<"shows">
 export type SetlistSong = Tables<"setlist_songs">
 export type ShowPhoto = Tables<"show_photos">
-export type ShowWithSongs = Show & {
+export type ShowWithRelations = Show & {
   setlist_songs: SetlistSong[]
   show_photos: ShowPhoto[]
+}
+export type ShowWithSongs = ShowWithRelations & {
   profiles: Pick<Profile, "username" | "avatar_url">
 }
 

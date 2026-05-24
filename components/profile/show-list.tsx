@@ -1,13 +1,10 @@
-import { Calendar, MapPin, Pencil, Star } from "lucide-react"
+import { Calendar, MapPin, Pencil } from "lucide-react"
 import Link from "next/link"
 import { StarRating } from "@/components/shows/star-rating"
-import { Badge } from "@/components/ui/badge"
-import { Show, SetlistSong, ShowPhoto } from "@/types/database"
-
-type ShowFull = Show & { setlist_songs: SetlistSong[]; show_photos: ShowPhoto[] }
+import { ShowWithRelations } from "@/types/database"
 
 interface ShowListProps {
-  shows: ShowFull[]
+  shows: ShowWithRelations[]
   emptyMessage?: string
   isOwner?: boolean
 }
