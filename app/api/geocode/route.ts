@@ -15,7 +15,7 @@ async function nominatimSearch(
   const q = encodeURIComponent(city ? `${name}, ${city}` : name)
   const res = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&addressdetails=0`,
-    { headers: NOMINATIM_HEADERS, next: { revalidate: 0 } }
+    { headers: NOMINATIM_HEADERS, next: { revalidate: 60 * 60 * 24 * 30 } }
   )
   if (!res.ok) return null
   const data = await res.json()

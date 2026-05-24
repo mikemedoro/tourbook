@@ -52,10 +52,10 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
 
       <div className="flex items-center gap-3">
         <div className="flex items-center">
-          <Link href="/find" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Find people">
+          <Link href="/find" aria-label="Find people" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Find people">
             <Search className="h-4 w-4" />
           </Link>
-          <Link href="/notifications" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Notifications">
+          <Link href="/notifications" aria-label={unreadNotifications > 0 ? `Notifications (${unreadNotifications} unread)` : "Notifications"} className={buttonVariants({ variant: "ghost", size: "sm" })} title="Notifications">
             <span className="relative">
               <Bell className="h-4 w-4" />
               {unreadNotifications > 0 && (
