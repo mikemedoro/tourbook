@@ -67,8 +67,8 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
           </Link>
         </div>
         <Link href="/log-show" className={buttonVariants({ size: "sm" })}>
-          <PlusCircle className="h-4 w-4 mr-1.5" />
-          Log show
+          <PlusCircle className="h-4 w-4 sm:mr-1.5" />
+          <span className="max-sm:sr-only">Log show</span>
         </Link>
 
         <DropdownMenu>
