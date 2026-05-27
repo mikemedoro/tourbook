@@ -21,6 +21,10 @@ import { Loader2, RefreshCw } from "lucide-react"
 
 const schema = z.object({
   show_date: z.string().min(1, "Date is required"),
+  venue_name: z.string().min(1, "Venue name is required"),
+  venue_city: z.string().min(1, "City is required"),
+  venue_state: z.string().optional(),
+  venue_country: z.string().optional(),
   other_acts: z.string().max(500).optional(),
   notes: z.string().max(2000).optional(),
 })
@@ -74,7 +78,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { show_date: "", other_acts: "", notes: "" },
+    defaultValues: { show_date: "", venue_name: "", venue_city: "", venue_state: "", venue_country: "", other_acts: "", notes: "" },
   })
 
   function handleArtistSelect(artist: SetlistFmArtist) {
@@ -89,6 +93,10 @@ export function LogShowForm({ userId }: LogShowFormProps) {
     setVenueCoords(null)
     const [d, m, y] = setlist.eventDate.split("-")
     setValue("show_date", `${y}-${m}-${d}`)
+    setValue("venue_name", setlist.venue.name)
+    setValue("venue_city", setlist.venue.city.name)
+    setValue("venue_state", setlist.venue.city.state ?? "")
+    setValue("venue_country", setlist.venue.city.country.name)
 
     // Flatten songs from all sets
     const flat: FlatSong[] = []
@@ -179,21 +187,24 @@ export function LogShowForm({ userId }: LogShowFormProps) {
         return
       }
 
-      // We need venue info — either from setlist or manual
-      const venueData = selectedSetlist
-        ? {
-            venue_name: selectedSetlist.venue.name,
-            venue_city: selectedSetlist.venue.city.name,
-            venue_state: selectedSetlist.venue.city.state ?? null,
-            venue_country: selectedSetlist.venue.city.country.name,
-            venue_lat: venueCoords?.lat ?? selectedSetlist.venue.city.coords?.lat ?? null,
-            venue_lng: venueCoords?.lng ?? selectedSetlist.venue.city.coords?.long ?? null,
-          }
-        : null
+      // Geocode if we don't have precise coords yet (manual entry path)
+      let coords = venueCoords
+      if (!coords && values.venue_name && values.venue_city) {
+        try {
+          const params = new URLSearchParams({ name: values.venue_name, city: values.venue_city })
+          const r = await fetch(`/api/geocode?${params}`)
+          const data = await r.json()
+          if (data?.lat && data?.lng) coords = { lat: data.lat, lng: data.lng }
+        } catch {}
+      }
 
-      if (!venueData) {
-        toast.error("Please select a setlist to populate the venue, or enter details manually.")
-        return
+      const venueData = {
+        venue_name: values.venue_name,
+        venue_city: values.venue_city,
+        venue_state: values.venue_state || "",
+        venue_country: values.venue_country || "",
+        venue_lat: coords?.lat ?? selectedSetlist?.venue.city.coords?.lat ?? null,
+        venue_lng: coords?.lng ?? selectedSetlist?.venue.city.coords?.long ?? null,
       }
 
       setSaving(true)
@@ -279,32 +290,66 @@ export function LogShowForm({ userId }: LogShowFormProps) {
         <ArtistSearch onSelect={handleArtistSelect} />
       </div>
 
-      {/* Setlist / Venue */}
+      {/* Import from Setlist.fm (optional) */}
       {selectedArtist && (
         <>
           <Separator />
           <div className="flex flex-col gap-2">
-            <Label>Setlist</Label>
-            <p className="text-xs text-muted-foreground">
-              Select a past setlist to auto-fill the venue, date, and songs.
-            </p>
+            <div>
+              <Label>Import from Setlist.fm <span className="text-muted-foreground font-normal">(optional)</span></Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                Select a past setlist to auto-fill the date, venue, and songs.
+              </p>
+            </div>
             <SetlistPicker mbid={selectedArtist.mbid} onSelect={handleSetlistSelect} />
           </div>
         </>
       )}
 
-      {/* Date override */}
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="show_date">Show date *</Label>
-        <Input
-          id="show_date"
-          type="date"
-          {...register("show_date")}
-        />
-        {errors.show_date && (
-          <p className="text-destructive text-xs">{errors.show_date.message}</p>
-        )}
-      </div>
+      {/* Date + Venue */}
+      {selectedArtist && (
+        <>
+          <Separator />
+          <div className="flex flex-col gap-3">
+            <Label className="text-base">Show details</Label>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="show_date">Date *</Label>
+              <Input id="show_date" type="date" {...register("show_date")} />
+              {errors.show_date && (
+                <p className="text-destructive text-xs">{errors.show_date.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="venue_name">Venue *</Label>
+              <Input id="venue_name" placeholder="e.g. Madison Square Garden" {...register("venue_name")} />
+              {errors.venue_name && (
+                <p className="text-destructive text-xs">{errors.venue_name.message}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="venue_city">City *</Label>
+                <Input id="venue_city" placeholder="e.g. New York" {...register("venue_city")} />
+                {errors.venue_city && (
+                  <p className="text-destructive text-xs">{errors.venue_city.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="venue_state">State / Region</Label>
+                <Input id="venue_state" placeholder="e.g. NY" {...register("venue_state")} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="venue_country">Country</Label>
+              <Input id="venue_country" placeholder="e.g. United States" {...register("venue_country")} />
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Songs */}
       {songs.length > 0 && (
