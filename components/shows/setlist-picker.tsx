@@ -95,7 +95,7 @@ export function SetlistPicker({ mbid, onSelect }: SetlistPickerProps) {
           type="button"
           onClick={() => load(1)}
           disabled={loading}
-          className="text-sm text-primary underline underline-offset-4 self-start"
+          className="text-sm text-primary underline underline-offset-4 self-start cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center gap-1.5">
