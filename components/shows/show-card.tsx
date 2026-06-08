@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/shows/star-rating"
 import { ShowWithSongs } from "@/types/database"
-import { userAvatarGradient } from "@/lib/utils"
+import { userAvatarGradient, getInitials } from "@/lib/utils"
 import { ShowPhotoToggle } from "@/components/shows/show-photo-toggle"
 
 interface ShowCardProps {
@@ -19,12 +19,7 @@ export function ShowCard({ show }: ShowCardProps) {
 
   const displayDate = new Date(show.show_date + "T12:00:00")
 
-  const profileInitials = show.profiles.display_name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) ?? show.profiles.username.slice(0, 2).toUpperCase()
+  const profileInitials = getInitials(show.profiles.display_name, show.profiles.username)
 
   return (
     <Card>

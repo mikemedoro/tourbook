@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
-import { userAvatarGradient } from "@/lib/utils"
+import { userAvatarGradient, getInitials } from "@/lib/utils"
 import { followUser, unfollowUser } from "@/app/actions/follows"
 
 interface UserResult {
@@ -109,12 +109,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
       {results.length > 0 && (
         <div className="flex flex-col divide-y">
           {results.map((user) => {
-            const initials = user.display_name
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase()
-              .slice(0, 2) ?? user.username.slice(0, 2).toUpperCase()
+            const initials = getInitials(user.display_name, user.username)
             const isFollowing = following.has(user.id)
             return (
               <div key={user.id} className="flex items-center gap-3 py-3">

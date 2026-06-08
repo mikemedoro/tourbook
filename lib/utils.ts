@@ -20,3 +20,14 @@ export function userAvatarGradient(username: string): { background: string; colo
     color: "#fff",
   }
 }
+
+export function getInitials(displayName: string | null | undefined, username: string): string {
+  return (
+    displayName
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) ?? username.slice(0, 2).toUpperCase()
+  )
+}

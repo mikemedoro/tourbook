@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Profile } from "@/types/database"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { userAvatarGradient } from "@/lib/utils"
+import { userAvatarGradient, getInitials } from "@/lib/utils"
 import { useFollowToggle } from "@/hooks/use-follow-toggle"
 
 interface ProfileHeaderProps {
@@ -28,12 +28,7 @@ export function ProfileHeader({
     username: profile.username,
   })
 
-  const initials = profile.display_name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) ?? profile.username.slice(0, 2).toUpperCase()
+  const initials = getInitials(profile.display_name, profile.username)
 
   function handleToggleClick() {
     if (!currentUserId) {

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/lib/supabase/client"
-import { userAvatarGradient } from "@/lib/utils"
+import { userAvatarGradient, getInitials } from "@/lib/utils"
 import { toast } from "sonner"
 
 interface NavbarProps {
@@ -36,12 +36,7 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
     router.refresh()
   }
 
-  const initials = user?.display_name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) ?? user?.username.slice(0, 2).toUpperCase()
+  const initials = user ? getInitials(user.display_name, user.username) : undefined
 
   return (
     <header className="border-b px-6 py-3 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-40">

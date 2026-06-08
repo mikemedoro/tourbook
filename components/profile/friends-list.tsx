@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { userAvatarGradient } from "@/lib/utils"
+import { userAvatarGradient, getInitials } from "@/lib/utils"
 import { Profile } from "@/types/database"
 
 type FriendProfile = Pick<Profile, "id" | "username" | "display_name" | "avatar_url">
@@ -12,13 +12,7 @@ interface FriendsListProps {
 }
 
 function FriendCard({ profile }: { profile: FriendProfile }) {
-  const initials =
-    profile.display_name
-      ?.split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2) ?? profile.username.slice(0, 2).toUpperCase()
+  const initials = getInitials(profile.display_name, profile.username)
 
   return (
     <Link
