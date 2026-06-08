@@ -433,7 +433,7 @@ export type ShowWithRelations = Show & {
   show_photos: ShowPhoto[]
 }
 export type ShowWithSongs = ShowWithRelations & {
-  profiles: Pick<Profile, "username" | "avatar_url">
+  profiles: Pick<Profile, "username" | "display_name" | "avatar_url">
 }
 
 export const Constants = {

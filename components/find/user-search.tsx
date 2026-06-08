@@ -14,6 +14,7 @@ import { followUser, unfollowUser } from "@/app/actions/follows"
 interface UserResult {
   id: string
   username: string
+  display_name: string | null
   avatar_url: string | null
   bio: string | null
 }
@@ -51,7 +52,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
     }
     const { data } = await supabase
       .from("profiles")
-      .select("id, username, avatar_url, bio")
+      .select("id, username, display_name, avatar_url, bio")
       .or(`username.ilike.%${trimmed}%`)
       .eq("is_public", true)
       .neq("id", currentUserId)
@@ -108,7 +109,12 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
       {results.length > 0 && (
         <div className="flex flex-col divide-y">
           {results.map((user) => {
-            const initials = user.username.slice(0, 2).toUpperCase()
+            const initials = user.display_name
+              ?.split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2) ?? user.username.slice(0, 2).toUpperCase()
             const isFollowing = following.has(user.id)
             return (
               <div key={user.id} className="flex items-center gap-3 py-3">

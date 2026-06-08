@@ -77,7 +77,12 @@ export function NotificationsList({ notifications, currentUserId }: Notification
   return (
     <div className="flex flex-col divide-y">
       {notifications.map((n) => {
-        const initials = (n.actor.display_name ?? n.actor.username).slice(0, 2).toUpperCase()
+        const initials = (n.actor.display_name ?? n.actor.username)
+          ?.split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2) ?? n.actor.username.slice(0, 2).toUpperCase()
         const isFollowingActor = following.has(n.actor.id)
 
         return (

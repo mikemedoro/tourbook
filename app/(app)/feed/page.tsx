@@ -35,7 +35,7 @@ export default async function FeedPage() {
       *,
       setlist_songs(*),
       show_photos(*),
-      profiles(username, avatar_url)
+      profiles(username, display_name, avatar_url)
     `
     )
     .in("user_id", feedUserIds)
