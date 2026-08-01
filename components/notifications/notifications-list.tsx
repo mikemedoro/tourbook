@@ -4,10 +4,11 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Ticket, TicketBody } from "@/components/ui/ticket"
 import { FollowButton } from "@/components/follows/follow-button"
+import { UserRow } from "@/components/users/user-row"
 import { markNotificationsRead } from "@/app/actions"
-import { userAvatarGradient, getInitials } from "@/lib/utils"
 
 type NotificationItem = {
   id: string
@@ -43,57 +44,50 @@ export function NotificationsList({ notifications }: NotificationsListProps) {
 
   if (notifications.length === 0) {
     return (
-      <p className="text-muted-foreground text-sm py-8 text-center">No notifications yet.</p>
+      <EmptyState
+        title="Nothing yet"
+        description="When someone follows you, it shows up here."
+      />
     )
   }
 
   return (
-    <div className="flex flex-col divide-y">
-      {notifications.map((n) => {
-        const initials = getInitials(n.actor.display_name, n.actor.username)
-        const isFollowingActor = following.has(n.actor.id)
-
-        return (
-          <div
-            key={n.id}
-            className={`py-4 flex items-center gap-3 ${!n.read ? "font-medium" : ""}`}
-          >
-            <Link href={`/profile/${n.actor.username}`}>
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={n.actor.avatar_url ?? undefined} />
-                <AvatarFallback
-                  className="text-xs"
-                  style={userAvatarGradient(n.actor.username)}
-                >
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
-
-            <div className="flex-1 min-w-0">
-              <p className="text-sm">
-                <Link
-                  href={`/profile/${n.actor.username}`}
-                  className="font-semibold hover:underline"
-                >
-                  @{n.actor.username}
-                </Link>{" "}
-                started following you
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
-              </p>
-            </div>
-
-            <FollowButton
-              targetUserId={n.actor.id}
+    <Ticket perforated={false}>
+      <TicketBody className="gap-0 p-0">
+        <div className="divide-y">
+          {notifications.map((n) => (
+            <UserRow
+              key={n.id}
               username={n.actor.username}
-              initialFollowing={isFollowingActor}
-              followLabel="Follow back"
+              displayName={n.actor.display_name}
+              avatarUrl={n.actor.avatar_url}
+              className={!n.read ? "bg-primary/5" : undefined}
+              primary={
+                <>
+                  <Link
+                    href={`/profile/${n.actor.username}`}
+                    className="font-semibold hover:underline"
+                  >
+                    @{n.actor.username}
+                  </Link>{" "}
+                  <span className="font-normal">started following you</span>
+                </>
+              }
+              meta={formatDistanceToNow(new Date(n.created_at), {
+                addSuffix: true,
+              })}
+              action={
+                <FollowButton
+                  targetUserId={n.actor.id}
+                  username={n.actor.username}
+                  initialFollowing={following.has(n.actor.id)}
+                  followLabel="Follow back"
+                />
+              }
             />
-          </div>
-        )
-      })}
-    </div>
+          ))}
+        </div>
+      </TicketBody>
+    </Ticket>
   )
 }

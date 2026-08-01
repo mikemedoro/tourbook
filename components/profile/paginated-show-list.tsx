@@ -12,6 +12,7 @@ interface PaginatedShowListProps {
   initialHasMore: boolean
   profileId: string
   emptyMessage?: string
+  emptyDescription?: string
   isOwner?: boolean
 }
 
@@ -20,6 +21,7 @@ export function PaginatedShowList({
   initialHasMore,
   profileId,
   emptyMessage,
+  emptyDescription,
   isOwner = false,
 }: PaginatedShowListProps) {
   const [shows, setShows] = useState(initialShows)
@@ -36,7 +38,12 @@ export function PaginatedShowList({
 
   return (
     <div className="flex flex-col gap-6">
-      <ShowList shows={shows} emptyMessage={emptyMessage} isOwner={isOwner} />
+      <ShowList
+        shows={shows}
+        emptyMessage={emptyMessage}
+        emptyDescription={emptyDescription}
+        isOwner={isOwner}
+      />
 
       {hasMore && (
         <div className="flex justify-center pt-4">

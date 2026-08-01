@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { FeedList } from "@/components/shows/feed-list"
 import { PageHeader } from "@/components/layout/page-header"
+import { EmptyState } from "@/components/ui/empty-state"
 import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
@@ -63,14 +64,20 @@ export default async function FeedPage() {
       {shows.length > 0 ? (
         <FeedList initialShows={shows} initialHasMore={hasMore} />
       ) : (
-        <div className="text-center py-20 text-muted-foreground flex flex-col items-center gap-3">
-          <p>No shows in your feed yet.</p>
-          <p className="text-sm">Follow some friends or log your first show.</p>
-          <div className="flex gap-3 mt-1">
-            <Link href="/find" className={buttonVariants({ variant: "outline" })}>Find people</Link>
-            <Link href="/log-show" className={buttonVariants()}>Log a show</Link>
-          </div>
-        </div>
+        <EmptyState
+          title="Nothing here yet"
+          description="Follow a few friends, or log the last show you went to."
+          action={
+            <>
+              <Link href="/log-show" className={buttonVariants()}>
+                Log a show
+              </Link>
+              <Link href="/find" className={buttonVariants({ variant: "outline" })}>
+                Find people
+              </Link>
+            </>
+          }
+        />
       )}
     </div>
   )

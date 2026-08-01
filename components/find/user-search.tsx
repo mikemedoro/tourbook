@@ -4,10 +4,11 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Ticket, TicketBody } from "@/components/ui/ticket"
 import { FollowButton } from "@/components/follows/follow-button"
+import { UserRow } from "@/components/users/user-row"
 import { createClient } from "@/lib/supabase/client"
-import { userAvatarGradient, getInitials } from "@/lib/utils"
 
 interface UserResult {
   id: string
@@ -91,40 +92,41 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
       </div>
 
       {searched && results.length === 0 && (
-        <p className="text-muted-foreground text-sm text-center py-6">No users found.</p>
+        <EmptyState
+          title="No users found"
+          description="Try a different username, or check the spelling."
+        />
       )}
 
       {results.length > 0 && (
-        <div className="flex flex-col divide-y">
-          {results.map((user) => {
-            const initials = getInitials(user.display_name, user.username)
-            const isFollowing = following.has(user.id)
-            return (
-              <div key={user.id} className="flex items-center gap-3 py-3">
-                <Link href={`/profile/${user.username}`}>
-                  <Avatar className="h-10 w-10 shrink-0">
-                    <AvatarImage src={user.avatar_url ?? undefined} />
-                    <AvatarFallback style={userAvatarGradient(user.username)}>{initials}</AvatarFallback>
-                  </Avatar>
-                </Link>
-                <div className="flex-1 min-w-0">
-                  <Link href={`/profile/${user.username}`} className="hover:underline">
-                    <p className="font-semibold text-sm">@{user.username}</p>
-                  </Link>
-                  {user.bio && (
-                    <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{user.bio}</p>
-                  )}
-                </div>
-                <FollowButton
-                  targetUserId={user.id}
+        <Ticket perforated={false}>
+          <TicketBody className="gap-0 p-0">
+            <div className="divide-y">
+              {results.map((user) => (
+                <UserRow
+                  key={user.id}
                   username={user.username}
-                  initialFollowing={isFollowing}
-                  onChange={(next) => syncFollowing(user.id, next)}
+                  displayName={user.display_name}
+                  avatarUrl={user.avatar_url}
+                  primary={
+                    <Link href={`/profile/${user.username}`} className="hover:underline">
+                      @{user.username}
+                    </Link>
+                  }
+                  secondary={user.bio}
+                  action={
+                    <FollowButton
+                      targetUserId={user.id}
+                      username={user.username}
+                      initialFollowing={following.has(user.id)}
+                      onChange={(next) => syncFollowing(user.id, next)}
+                    />
+                  }
                 />
-              </div>
-            )
-          })}
-        </div>
+              ))}
+            </div>
+          </TicketBody>
+        </Ticket>
       )}
     </div>
   )

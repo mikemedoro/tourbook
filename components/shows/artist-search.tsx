@@ -77,7 +77,7 @@ export function ArtistSearch({ onSelect }: ArtistSearchProps) {
       </div>
 
       {results.length > 0 && (
-        <ul className="border rounded-md divide-y bg-background shadow-sm max-h-60 overflow-y-auto">
+        <ul className="max-h-60 divide-y overflow-y-auto rounded-md border bg-popover shadow-xs">
           {results.map((artist) => (
             <li key={artist.mbid}>
               <button

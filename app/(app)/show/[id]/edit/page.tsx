@@ -1,6 +1,8 @@
 import { notFound, redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { EditShowForm } from "@/components/shows/edit-show-form"
+import { PageHeader } from "@/components/layout/page-header"
+import { Ticket, TicketBody } from "@/components/ui/ticket"
 import { ShowWithRelations } from "@/types/database"
 
 interface Props {
@@ -38,13 +40,15 @@ export default async function EditShowPage({ params }: Props) {
 
   return (
     <div className="max-w-xl mx-auto flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold">Edit show</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Update your ratings, notes, and song highlights.
-        </p>
-      </div>
-      <EditShowForm show={show} username={profile?.username ?? ""} />
+      <PageHeader
+        title="Edit show"
+        description="Update your ratings, notes, and song highlights."
+      />
+      <Ticket perforated={false}>
+        <TicketBody className="gap-6 p-6">
+          <EditShowForm show={show} username={profile?.username ?? ""} />
+        </TicketBody>
+      </Ticket>
     </div>
   )
 }

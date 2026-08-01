@@ -162,13 +162,19 @@ export default async function ProfilePage({ params }: Props) {
             initialShows={firstPageShows}
             initialHasMore={hasMoreShows}
             profileId={profile.id}
-            emptyMessage="No shows logged yet."
+            emptyMessage="No shows yet"
+            emptyDescription="Shows logged here will appear in this archive."
             isOwner={isOwner}
           />
         </TabsContent>
 
         <TabsContent value="top" className="mt-6">
-          <ShowList shows={topShows} emptyMessage="Rate some shows to see your top picks." isOwner={isOwner} />
+          <ShowList
+            shows={topShows}
+            emptyMessage="Nothing rated yet"
+            emptyDescription="Give a show an overall rating and it will show up here."
+            isOwner={isOwner}
+          />
         </TabsContent>
 
         {process.env.NEXT_PUBLIC_SHOW_MAP === "true" && (

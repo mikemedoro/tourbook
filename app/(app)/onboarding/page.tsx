@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { UsernameForm } from "@/components/onboarding/username-form"
+import { PageHeader } from "@/components/layout/page-header"
 
 export default async function OnboardingPage() {
   const supabase = await createClient()
@@ -26,12 +27,10 @@ export default async function OnboardingPage() {
 
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6 pt-8">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">Choose your username</h1>
-        <p className="text-muted-foreground">
-          Pick a username for your Tourbook profile. You can always change it later in settings.
-        </p>
-      </div>
+      <PageHeader
+        title="Choose your username"
+        description="Pick a username for your Tourbook profile. You can change it later in settings."
+      />
       <UsernameForm defaultUsername={defaultUsername} />
     </div>
   )

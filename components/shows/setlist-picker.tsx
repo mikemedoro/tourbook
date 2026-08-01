@@ -150,7 +150,7 @@ export function SetlistPicker({ mbid, onSelect }: SetlistPickerProps) {
       )}
 
       {filtered.length > 0 && (
-        <ul className="border rounded-md divide-y max-h-95 overflow-y-auto">
+        <ul className="max-h-95 divide-y overflow-y-auto rounded-md border bg-popover">
           {filtered.map((s) => {
             const songCount = s.sets.set.reduce(
               (acc, set) => acc + set.song.length,

@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/shows/star-rating"
 import { createClient } from "@/lib/supabase/client"
 import { ShowPhoto, ShowWithRelations } from "@/types/database"
-import { Loader2, MapPin, RefreshCw, Trash2, X } from "lucide-react"
+import { Loader2, RefreshCw, Trash2, X } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -196,12 +196,13 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       {/* Show info (read-only) */}
-      <div className="rounded-md border p-4 bg-muted/30 flex flex-col gap-0.5">
-        <h2 className="font-semibold text-lg">{show.artist_name}</h2>
-        <p className="text-sm text-muted-foreground flex items-center gap-1">
-          <MapPin className="h-3.5 w-3.5 shrink-0" />
-          {show.venue_name}, {show.venue_city}
-          {show.venue_state ? `, ${show.venue_state}` : ""}, {show.venue_country}
+      <div className="flex flex-col gap-1.5 border-l-2 border-primary pl-3">
+        <h2 className="font-heading text-xl leading-tight font-bold tracking-[-0.02em] uppercase">
+          {show.artist_name}
+        </h2>
+        <p className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
+          {show.venue_name} · {show.venue_city}
+          {show.venue_state ? `, ${show.venue_state}` : ""}
         </p>
       </div>
 

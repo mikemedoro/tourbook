@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { PageHeader } from "@/components/layout/page-header"
 import { createClient } from "@/lib/supabase/client"
 
 const schema = z.object({
@@ -80,10 +81,11 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">Create your account</h1>
-        <p className="text-muted-foreground text-sm mt-1">Start logging your shows</p>
-      </div>
+      <PageHeader
+        align="center"
+        title="Create your account"
+        description="Start logging your shows"
+      />
 
       <Button
         variant="outline"

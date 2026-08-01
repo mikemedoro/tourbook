@@ -2,11 +2,13 @@ import { Pencil } from "lucide-react"
 import Link from "next/link"
 import { StarRating } from "@/components/shows/star-rating"
 import { Ticket, TicketBody } from "@/components/ui/ticket"
+import { EmptyState } from "@/components/ui/empty-state"
 import { ShowWithRelations } from "@/types/database"
 
 interface ShowListProps {
   shows: ShowWithRelations[]
   emptyMessage?: string
+  emptyDescription?: string
   isOwner?: boolean
 }
 
@@ -18,14 +20,15 @@ interface ShowListProps {
  */
 export function ShowList({
   shows,
-  emptyMessage = "No shows yet.",
+  emptyMessage = "No shows yet",
+  emptyDescription,
   isOwner = false,
 }: ShowListProps) {
   if (shows.length === 0) {
     return (
       <Ticket perforated={false}>
-        <TicketBody className="items-center py-12">
-          <p className="text-sm text-muted-foreground">{emptyMessage}</p>
+        <TicketBody className="p-0">
+          <EmptyState title={emptyMessage} description={emptyDescription} />
         </TicketBody>
       </Ticket>
     )

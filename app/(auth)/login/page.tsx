@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { PageHeader } from "@/components/layout/page-header"
 import { createClient } from "@/lib/supabase/client"
 
 const schema = z.object({
@@ -65,10 +66,11 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">Welcome back</h1>
-        <p className="text-muted-foreground text-sm mt-1">Log in to your Tourbook account</p>
-      </div>
+      <PageHeader
+        align="center"
+        title="Welcome back"
+        description="Log in to your Tourbook account"
+      />
 
       <Button
         variant="outline"
