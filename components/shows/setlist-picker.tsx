@@ -170,7 +170,7 @@ export function SetlistPicker({ mbid, onSelect }: SetlistPickerProps) {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span>
-                      {formatDate(s.eventDate)} — {s.venue.name},{" "}
+                      {formatDate(s.eventDate)} · {s.venue.name},{" "}
                       {s.venue.city.name}
                     </span>
                     <Badge variant="outline" className="shrink-0 text-xs">

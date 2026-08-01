@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Music, PlusCircle, LogOut, User, Settings, Search, Bell } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation"
+import { PlusCircle, LogOut, User, Settings, Search, Bell } from "lucide-react"
+import { Wordmark } from "@/components/brand/wordmark"
 import { buttonVariants } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/lib/supabase/client"
-import { userAvatarGradient, getInitials } from "@/lib/utils"
+import { cn, userAvatarGradient, getInitials } from "@/lib/utils"
 import { toast } from "sonner"
 
 interface NavbarProps {
@@ -27,6 +28,7 @@ interface NavbarProps {
 
 export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const supabase = createClient()
 
   async function handleSignOut() {
@@ -39,11 +41,33 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
   const initials = user ? getInitials(user.display_name, user.username) : undefined
 
   return (
-    <header className="border-b px-6 py-3 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-40">
-      <Link href="/feed" className="flex items-center gap-2 font-semibold">
-        <Music className="h-5 w-5" />
-        Tourbook
-      </Link>
+    <header className="border-b px-5 py-4 sm:px-6 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-40">
+      <div className="flex items-center gap-5">
+        <Link href="/feed" aria-label="Tourbook home" className="shrink-0">
+          <Wordmark />
+        </Link>
+
+        <nav className="flex items-center gap-4">
+          {[{ href: "/feed", label: "Feed" }].map((item) => {
+            const active = pathname === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "font-mono text-[11px] tracking-[0.12em] uppercase transition-colors",
+                  active
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+      </div>
 
       <div className="flex items-center gap-3">
         <div className="flex items-center">

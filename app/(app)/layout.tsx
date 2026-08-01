@@ -27,7 +27,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar user={profile} unreadNotifications={unreadNotifications ?? 0} />
-      <main className="flex-1 container max-w-4xl mx-auto px-4 py-12">{children}</main>
+      <main className="flex-1 container max-w-4xl mx-auto px-5 py-14 sm:px-6 sm:py-20">{children}</main>
     </div>
   )
 }

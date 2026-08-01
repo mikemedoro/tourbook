@@ -59,7 +59,7 @@ export function VenueMap({ markers }: VenueMapProps) {
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/dark-v11",
+      style: "mapbox://styles/mapbox/light-v11",
       center:
         resolved.length > 0
           ? [resolved[0].lng, resolved[0].lat]
@@ -76,9 +76,9 @@ export function VenueMap({ markers }: VenueMapProps) {
         el.style.width = "14px"
         el.style.height = "14px"
         el.style.borderRadius = "50%"
-        el.style.backgroundColor = "#6366f1"
-        el.style.border = "2px solid white"
-        el.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)"
+        el.style.backgroundColor = "#ff6c45"
+        el.style.border = "2px solid #f3ece6"
+        el.style.boxShadow = "0 1px 4px rgba(29,29,29,0.35)"
         el.style.cursor = "pointer"
 
         new mapboxgl.Marker({ element: el })

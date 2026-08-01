@@ -131,7 +131,7 @@ export default async function ProfilePage({ params }: Props) {
     }))
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10 sm:gap-12">
       <ProfileHeader
         profile={profile}
         isOwner={isOwner}
@@ -157,7 +157,7 @@ export default async function ProfilePage({ params }: Props) {
           )}
         </TabsList>
 
-        <TabsContent value="shows" className="mt-4">
+        <TabsContent value="shows" className="mt-6">
           <PaginatedShowList
             initialShows={firstPageShows}
             initialHasMore={hasMoreShows}
@@ -167,12 +167,12 @@ export default async function ProfilePage({ params }: Props) {
           />
         </TabsContent>
 
-        <TabsContent value="top" className="mt-4">
+        <TabsContent value="top" className="mt-6">
           <ShowList shows={topShows} emptyMessage="Rate some shows to see your top picks." isOwner={isOwner} />
         </TabsContent>
 
         {process.env.NEXT_PUBLIC_SHOW_MAP === "true" && (
-          <TabsContent value="map" className="mt-4">
+          <TabsContent value="map" className="mt-6">
             <VenueMap markers={venueMarkers} />
           </TabsContent>
         )}

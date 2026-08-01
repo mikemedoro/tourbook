@@ -4,12 +4,10 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { FollowButton } from "@/components/follows/follow-button"
 import { createClient } from "@/lib/supabase/client"
-import { toast } from "sonner"
 import { userAvatarGradient, getInitials } from "@/lib/utils"
-import { followUser, unfollowUser } from "@/app/actions/follows"
 
 interface UserResult {
   id: string
@@ -28,7 +26,6 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<UserResult[]>([])
   const [following, setFollowing] = useState<Set<string>>(new Set())
-  const [loadingId, setLoadingId] = useState<string | null>(null)
   const [searched, setSearched] = useState(false)
 
   // Load existing follows on mount
@@ -69,24 +66,15 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
     return () => clearTimeout(timer)
   }, [query, search])
 
-  async function toggleFollow(userId: string, username: string) {
-    setLoadingId(userId)
-    const isFollowing = following.has(userId)
-
-    const result = isFollowing ? await unfollowUser(userId) : await followUser(userId)
-
-    if (result.ok) {
-      setFollowing((prev) => {
-        const next = new Set(prev)
-        if (isFollowing) next.delete(userId)
-        else next.add(userId)
-        return next
-      })
-      toast.success(isFollowing ? `Unfollowed @${username}` : `Following @${username}`)
-    } else {
-      toast.error(result.error)
-    }
-    setLoadingId(null)
+  // FollowButton owns the mutation and its own optimistic state; this set only
+  // seeds each row and is kept current so re-running a search stays accurate.
+  function syncFollowing(userId: string, isFollowing: boolean) {
+    setFollowing((prev) => {
+      const next = new Set(prev)
+      if (isFollowing) next.add(userId)
+      else next.delete(userId)
+      return next
+    })
   }
 
   return (
@@ -127,14 +115,12 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
                     <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{user.bio}</p>
                   )}
                 </div>
-                <Button
-                  size="sm"
-                  variant={isFollowing ? "outline" : "default"}
-                  disabled={loadingId === user.id}
-                  onClick={() => toggleFollow(user.id, user.username)}
-                >
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </Button>
+                <FollowButton
+                  targetUserId={user.id}
+                  username={user.username}
+                  initialFollowing={isFollowing}
+                  onChange={(next) => syncFollowing(user.id, next)}
+                />
               </div>
             )
           })}

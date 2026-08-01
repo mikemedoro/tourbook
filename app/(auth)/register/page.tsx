@@ -60,7 +60,7 @@ export default function RegisterPage() {
       return
     }
 
-    toast.success("Check your email to confirm your account!")
+    toast.success("Check your email to confirm your account.")
     router.push("/login")
   }
 

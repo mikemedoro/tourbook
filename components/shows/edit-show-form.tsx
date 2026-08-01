@@ -8,6 +8,7 @@ import { z } from "zod"
 import { toast } from "sonner"
 import Image from "next/image"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { FormActions } from "@/components/ui/form-actions"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -115,7 +116,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
       .from("show-photos")
       .remove([photo.storage_path])
     if (storageError) {
-      toast.error("Failed to delete photo")
+      toast.error("Failed to delete photo.")
       return
     }
     await supabase.from("show_photos").delete().eq("id", photo.id)
@@ -174,11 +175,11 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
           }
         }
 
-        toast.success("Show updated!")
+        toast.success("Show updated.")
         router.push(`/profile/${username}`)
         router.refresh()
       } catch (err) {
-        toast.error((err as Error).message ?? "Failed to update show")
+        toast.error((err as Error).message ?? "Failed to update show.")
       } finally {
         setSaving(false)
       }
@@ -338,43 +339,53 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
         )}
       </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex gap-3">
-          <Button type="submit" disabled={saving || deleting}>
-            {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            Save changes
-          </Button>
-          <Button type="button" variant="outline" onClick={() => router.back()} disabled={saving || deleting}>
-            Cancel
-          </Button>
-        </div>
-
-        <AlertDialog>
-          <AlertDialogTrigger
-            type="button"
-            className={`${buttonVariants({ variant: "ghost", size: "sm" })} text-destructive hover:text-destructive`}
-            disabled={saving || deleting}
-          >
-            <Trash2 className="h-4 w-4 mr-1.5" />
-            Delete
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete this show?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will permanently delete <strong>{show.artist_name}</strong> at {show.venue_name}. This cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDelete} disabled={deleting} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                {deleting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                Delete show
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+      <FormActions
+        destructive={
+          <AlertDialog>
+            <AlertDialogTrigger
+              type="button"
+              className={buttonVariants({ variant: "destructive" })}
+              disabled={saving || deleting}
+            >
+              <Trash2 className="mr-1.5 h-4 w-4" />
+              Delete
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete this show?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete <strong>{show.artist_name}</strong> at{" "}
+                  {show.venue_name}. This cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className={buttonVariants({ variant: "destructive-solid" })}
+                >
+                  {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Delete show
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        }
+      >
+        <Button type="submit" disabled={saving || deleting}>
+          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Save changes
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          disabled={saving || deleting}
+        >
+          Cancel
+        </Button>
+      </FormActions>
     </form>
   )
 }

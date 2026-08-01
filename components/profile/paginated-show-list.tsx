@@ -35,11 +35,11 @@ export function PaginatedShowList({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <ShowList shows={shows} emptyMessage={emptyMessage} isOwner={isOwner} />
 
       {hasMore && (
-        <div className="flex justify-center pt-2">
+        <div className="flex justify-center pt-4">
           <Button variant="outline" onClick={handleLoadMore} disabled={isPending}>
             {isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Load more

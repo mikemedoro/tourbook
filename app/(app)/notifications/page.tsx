@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { NotificationsList } from "@/components/notifications/notifications-list"
+import { PageHeader } from "@/components/layout/page-header"
 
 type NotificationRow = {
   id: string
@@ -59,8 +60,8 @@ export default async function NotificationsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">Notifications</h1>
-      <NotificationsList notifications={items} currentUserId={user.id} />
+      <PageHeader title="Notifications" />
+      <NotificationsList notifications={items} />
     </div>
   )
 }

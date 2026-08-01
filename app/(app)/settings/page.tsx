@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { EditProfileForm } from "@/components/profile/edit-profile-form"
+import { PageHeader } from "@/components/layout/page-header"
+import { Ticket, TicketBody } from "@/components/ui/ticket"
 import { Profile } from "@/types/database"
 
 export default async function SettingsPage() {
@@ -22,11 +24,12 @@ export default async function SettingsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold">Edit profile</h1>
-        <p className="text-muted-foreground text-sm mt-1">Update your public profile info.</p>
-      </div>
-      <EditProfileForm profile={profile} />
+      <PageHeader title="Edit profile" description="Update your public profile info." />
+      <Ticket perforated={false}>
+        <TicketBody className="gap-6 p-6">
+          <EditProfileForm profile={profile} />
+        </TicketBody>
+      </Ticket>
     </div>
   )
 }

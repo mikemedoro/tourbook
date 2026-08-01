@@ -26,13 +26,13 @@ export function FeedList({ initialShows, initialHasMore }: FeedListProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10 sm:gap-12">
       {shows.map((show) => (
         <ShowCard key={show.id} show={show} />
       ))}
 
       {hasMore && (
-        <div className="flex justify-center pt-2">
+        <div className="flex justify-center pt-4">
           <Button variant="outline" onClick={handleLoadMore} disabled={isPending}>
             {isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Load more

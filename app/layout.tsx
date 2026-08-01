@@ -1,20 +1,26 @@
 import type { Metadata } from "next"
-import { Geist, Figtree } from "next/font/google"
+import { Geist, Instrument_Sans, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-const figtreeHeading = Figtree({subsets:['latin'],variable:'--font-heading'});
+// Body copy
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" })
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Headings / display
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
+  variable: "--font-instrument-sans",
+})
+
+// Tertiary: dates, venue codes, counts, anything tabular
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
 })
 
 export const metadata: Metadata = {
-  title: "Tourbook — Log every show",
+  title: "Tourbook: log every show",
   description: "Track the concerts you've attended, rate the experience, and share with friends.",
 }
 
@@ -24,7 +30,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn("dark", "h-full", "antialiased", geistSans.variable, "font-sans", geist.variable, figtreeHeading.variable)}>
+    <html
+      lang="en"
+      className={cn(
+        "h-full",
+        "antialiased",
+        "font-sans",
+        geist.variable,
+        instrumentSans.variable,
+        jetbrainsMono.variable
+      )}
+    >
       <body className="min-h-full bg-background text-foreground">
         {children}
         <Toaster />

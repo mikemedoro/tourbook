@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { FeedList } from "@/components/shows/feed-list"
+import { PageHeader } from "@/components/layout/page-header"
 import { buttonVariants } from "@/components/ui/button"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
@@ -48,14 +49,16 @@ export default async function FeedPage() {
   const hasMore = allFetched.length > PAGE_SIZE
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Feed</h1>
-        <Link href="/log-show" className={buttonVariants()}>
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Log a show
-        </Link>
-      </div>
+    <div className="flex flex-col gap-10">
+      <PageHeader
+        title="Feed"
+        action={
+          <Link href="/log-show" className={buttonVariants()}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Log a show
+          </Link>
+        }
+      />
 
       {shows.length > 0 ? (
         <FeedList initialShows={shows} initialHasMore={hasMore} />

@@ -22,7 +22,7 @@ export function FriendsDialog({ following, followers }: FriendsDialogProps) {
       <DialogTrigger
         nativeButton={false}
         render={<span className="cursor-pointer" />}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase transition-colors hover:text-foreground"
       >
         <span className="font-semibold text-foreground">{following.length}</span>{" "}
         following

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { FormActions } from "@/components/ui/form-actions"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -257,7 +258,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
           }
         }
 
-        toast.success("Show logged!")
+        toast.success("Show logged.")
         router.push("/feed")
         router.refresh()
       } catch (err) {
@@ -458,16 +459,20 @@ export function LogShowForm({ userId }: LogShowFormProps) {
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={saving}>
-        {saving ? (
-          <>
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            Saving…
-          </>
-        ) : (
-          "Log show"
-        )}
-      </Button>
+      <FormActions>
+        <Button type="submit" disabled={saving}>
+          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {saving ? "Saving…" : "Log show"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          disabled={saving}
+        >
+          Cancel
+        </Button>
+      </FormActions>
     </form>
   )
 }

@@ -5,12 +5,9 @@ import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { createClient } from "@/lib/supabase/client"
+import { FollowButton } from "@/components/follows/follow-button"
 import { markNotificationsRead } from "@/app/actions"
-import { followUser, unfollowUser } from "@/app/actions/follows"
 import { userAvatarGradient, getInitials } from "@/lib/utils"
-import { toast } from "sonner"
 
 type NotificationItem = {
   id: string
@@ -28,16 +25,13 @@ type NotificationItem = {
 
 interface NotificationsListProps {
   notifications: NotificationItem[]
-  currentUserId: string
 }
 
-export function NotificationsList({ notifications, currentUserId }: NotificationsListProps) {
+export function NotificationsList({ notifications }: NotificationsListProps) {
   const router = useRouter()
-  const supabase = createClient()
-  const [following, setFollowing] = useState<Set<string>>(
+  const [following] = useState<Set<string>>(
     new Set(notifications.filter((n) => n.isFollowingBack).map((n) => n.actor.id))
   )
-  const [loadingId, setLoadingId] = useState<string | null>(null)
 
   // Mark all unread as read on mount
   useEffect(() => {
@@ -46,27 +40,6 @@ export function NotificationsList({ notifications, currentUserId }: Notification
     markNotificationsRead().then(() => router.refresh())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  async function toggleFollow(actorId: string, username: string) {
-    setLoadingId(actorId)
-    const isFollowing = following.has(actorId)
-
-    const result = isFollowing ? await unfollowUser(actorId) : await followUser(actorId)
-
-    if (result.ok) {
-      setFollowing((prev) => {
-        const next = new Set(prev)
-        if (isFollowing) next.delete(actorId)
-        else next.add(actorId)
-        return next
-      })
-      toast.success(isFollowing ? `Unfollowed @${username}` : `Following @${username}`)
-    } else {
-      toast.error(result.error)
-    }
-
-    setLoadingId(null)
-  }
 
   if (notifications.length === 0) {
     return (
@@ -112,14 +85,12 @@ export function NotificationsList({ notifications, currentUserId }: Notification
               </p>
             </div>
 
-            <Button
-              size="sm"
-              variant={isFollowingActor ? "outline" : "default"}
-              disabled={loadingId === n.actor.id}
-              onClick={() => toggleFollow(n.actor.id, n.actor.username)}
-            >
-              {isFollowingActor ? "Following" : "Follow back"}
-            </Button>
+            <FollowButton
+              targetUserId={n.actor.id}
+              username={n.actor.username}
+              initialFollowing={isFollowingActor}
+              followLabel="Follow back"
+            />
           </div>
         )
       })}

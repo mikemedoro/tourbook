@@ -8,6 +8,7 @@ import { z } from "zod"
 import { toast } from "sonner"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
+import { FormActions } from "@/components/ui/form-actions"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -92,9 +93,11 @@ export function EditProfileForm({ profile }: EditProfileFormProps) {
         )}
       </div>
 
-      <Button type="submit" disabled={saving} className="self-start">
-        {saving ? "Saving…" : "Save changes"}
-      </Button>
+      <FormActions>
+        <Button type="submit" disabled={saving}>
+          {saving ? "Saving…" : "Save changes"}
+        </Button>
+      </FormActions>
     </form>
   )
 }
