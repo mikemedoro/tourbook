@@ -71,7 +71,7 @@ export function ShowList({
 
                 <div className="flex shrink-0 items-center gap-2">
                   {show.overall_rating && (
-                    <StarRating value={show.overall_rating} readonly size="sm" />
+                    <StarRating value={show.overall_rating} readonly size="sm" label="Overall" />
                   )}
                   {isOwner && (
                     <Link

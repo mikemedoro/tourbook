@@ -8,12 +8,14 @@ interface StarRatingProps {
   onChange?: (value: number) => void
   readonly?: boolean
   size?: "sm" | "md" | "lg"
+  /** What is being rated, used to name the control for screen readers. */
+  label?: string
 }
 
 const sizeClasses = {
-  sm: "h-3.5 w-3.5",
-  md: "h-5 w-5",
-  lg: "h-6 w-6",
+  sm: "size-3.5",
+  md: "size-5",
+  lg: "size-6",
 }
 
 export function StarRating({
@@ -21,21 +23,47 @@ export function StarRating({
   onChange,
   readonly = false,
   size = "md",
+  label = "Rating",
 }: StarRatingProps) {
+  // Read-only ratings are output, not controls. Rendering them as disabled
+  // buttons put five unlabelled stops in the tab order and announced nothing.
+  if (readonly) {
+    return (
+      <span
+        className="flex items-center gap-0.5"
+        role="img"
+        aria-label={`${label}: ${value} out of 5`}
+      >
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            aria-hidden="true"
+            className={cn(
+              sizeClasses[size],
+              star <= value
+                ? "fill-star stroke-star"
+                : "fill-none stroke-muted-foreground"
+            )}
+          />
+        ))}
+      </span>
+    )
+  }
+
   return (
-    <div className="flex items-center gap-0.5">
+    <span className="flex items-center gap-0.5" role="radiogroup" aria-label={label}>
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
           type="button"
-          disabled={readonly}
+          role="radio"
+          aria-checked={star === value}
+          aria-label={`${star} star${star === 1 ? "" : "s"}`}
           onClick={() => onChange?.(star)}
-          className={cn(
-            "transition-colors",
-            readonly ? "cursor-default" : "cursor-pointer hover:scale-110"
-          )}
+          className="cursor-pointer transition-transform hover:scale-110 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           <Star
+            aria-hidden="true"
             className={cn(
               sizeClasses[size],
               star <= value
@@ -45,6 +73,6 @@ export function StarRating({
           />
         </button>
       ))}
-    </div>
+    </span>
   )
 }

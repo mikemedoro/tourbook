@@ -3,13 +3,15 @@ import { createClient } from "@/lib/supabase/server"
 import { ProfileHeader } from "@/components/profile/profile-header"
 import { ProfileStats } from "@/components/profile/profile-stats"
 import { ShowList } from "@/components/profile/show-list"
+import { ArtistTally } from "@/components/profile/artist-tally"
 import { PaginatedShowList } from "@/components/profile/paginated-show-list"
 import { FriendsDialog } from "@/components/profile/friends-dialog"
 import { VenueMap } from "@/components/map/venue-map"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Profile, Show, ShowWithRelations } from "@/types/database"
+import { tallyArtists } from "@/lib/artist-tally"
 
-type StatShow = Pick<Show, "id" | "artist_name" | "venue_name" | "venue_city" | "venue_state" | "venue_country" | "venue_lat" | "venue_lng" | "show_date">
+type StatShow = Pick<Show, "id" | "artist_name" | "artist_mbid" | "venue_name" | "venue_city" | "venue_state" | "venue_country" | "venue_lat" | "venue_lng" | "show_date">
 
 const PAGE_SIZE = 20
 
@@ -45,7 +47,7 @@ export default async function ProfilePage({ params }: Props) {
   // 3. First page of all shows with full data for the All shows tab
   let statsQuery = supabase
     .from("shows")
-    .select("id, artist_name, venue_name, venue_city, venue_state, venue_country, venue_lat, venue_lng, show_date")
+    .select("id, artist_name, artist_mbid, venue_name, venue_city, venue_state, venue_country, venue_lat, venue_lng, show_date")
     .eq("user_id", profile.id)
 
   let topQuery = supabase
@@ -112,6 +114,7 @@ export default async function ProfilePage({ params }: Props) {
   const totalShows = statsShows.length
   const uniqueCities = new Set(statsShows.map((s) => s.venue_city).filter(Boolean)).size
   const uniqueVenues = new Set(statsShows.map((s) => s.venue_name)).size
+  const artists = tallyArtists(statsShows)
   const currentYear = new Date().getFullYear()
   const showsThisYear = statsShows.filter(
     (s) => new Date(s.show_date).getFullYear() === currentYear
@@ -146,12 +149,14 @@ export default async function ProfilePage({ params }: Props) {
         uniqueCities={uniqueCities}
         uniqueVenues={uniqueVenues}
         showsThisYear={showsThisYear}
+        uniqueArtists={artists.length}
       />
 
       <Tabs defaultValue="shows">
         <TabsList>
           <TabsTrigger value="shows">All shows</TabsTrigger>
           <TabsTrigger value="top">Top shows</TabsTrigger>
+          <TabsTrigger value="artists">Artists</TabsTrigger>
           {process.env.NEXT_PUBLIC_SHOW_MAP === "true" && (
             <TabsTrigger value="map">Map</TabsTrigger>
           )}
@@ -174,6 +179,13 @@ export default async function ProfilePage({ params }: Props) {
             emptyMessage="Nothing rated yet"
             emptyDescription="Give a show an overall rating and it will show up here."
             isOwner={isOwner}
+          />
+        </TabsContent>
+
+        <TabsContent value="artists" className="mt-6">
+          <ArtistTally
+            artists={artists}
+            emptyMessage={isOwner ? "No artists yet" : "Nothing to show"}
           />
         </TabsContent>
 

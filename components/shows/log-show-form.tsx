@@ -376,23 +376,23 @@ export function LogShowForm({ userId }: LogShowFormProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Overall</span>
-            <StarRating value={overallRating} onChange={setOverallRating} />
+            <StarRating value={overallRating} onChange={setOverallRating} label="Overall" />
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Sound</span>
-            <StarRating value={soundRating} onChange={setSoundRating} />
+            <StarRating value={soundRating} onChange={setSoundRating} label="Sound" />
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Setlist</span>
-            <StarRating value={setlistRating} onChange={setSetlistRating} />
+            <StarRating value={setlistRating} onChange={setSetlistRating} label="Setlist" />
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Venue</span>
-            <StarRating value={venueRating} onChange={setVenueRating} />
+            <StarRating value={venueRating} onChange={setVenueRating} label="Venue" />
           </div>
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Crowd</span>
-            <StarRating value={crowdRating} onChange={setCrowdRating} />
+            <StarRating value={crowdRating} onChange={setCrowdRating} label="Crowd" />
           </div>
         </div>
       </div>

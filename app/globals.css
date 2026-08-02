@@ -65,9 +65,13 @@
   --popover-foreground: oklch(0.235 0.01 55);
   --primary: oklch(0.812 0.15 69.5); /* brand orange #ffae44 */
   --primary-foreground: oklch(0.235 0.01 55);
-  --secondary: oklch(0.917 0.031 57.9); /* sand #f4dfd0 */
+  /* Deeper clay than the page. amber.health sets its sand against white; on a
+     bone page the original #f4dfd0 landed at 1.1:1 and read as a smudge. */
+  --secondary: oklch(0.855 0.055 52);
   --secondary-foreground: oklch(0.3 0.025 50);
-  --muted: oklch(0.917 0.031 57.9);
+  /* Muted stays close to the page: it is for wells and hover fills, where
+     being barely-there is the point. Previously identical to --secondary. */
+  --muted: oklch(0.928 0.02 58);
   --muted-foreground: oklch(0.515 0.026 50);
   /* --accent is the menu/select hover surface — keep it a surface, not a brand hit */
   --accent: oklch(0.9 0.03 57);
@@ -77,8 +81,11 @@
      ink is 4.9:1. Same reason the amber primary takes ink. */
   --destructive-foreground: oklch(0.235 0.01 55);
   --star: oklch(0.799 0.154 67.5); /* brand yellow #fea83d */
-  --border: oklch(0.838 0.021 58);
-  --input: oklch(0.838 0.021 58);
+  --border: oklch(0.838 0.021 58); /* dividers and card edges: decorative */
+  /* Form field boundaries identify the control, so WCAG 1.4.11 wants 3:1.
+     At the divider value they sat at 1.6:1 on card. This clears 3:1 on both
+     the card and the bone page. */
+  --input: oklch(0.63 0.022 58);
   --ring: oklch(0.812 0.15 69.5);
   --chart-1: oklch(0.812 0.15 69.5);
   --chart-2: oklch(0.707 0.188 35.8);
@@ -86,7 +93,7 @@
   --chart-4: oklch(0.799 0.154 67.5);
   --chart-5: oklch(0.515 0.026 50);
   --radius: 0.625rem;
-  --sidebar: oklch(0.917 0.031 57.9);
+  --sidebar: oklch(0.928 0.02 58);
   --sidebar-foreground: oklch(0.235 0.01 55);
   --sidebar-primary: oklch(0.707 0.188 35.8);
   --sidebar-primary-foreground: oklch(0.985 0.005 70);
@@ -107,9 +114,9 @@
   --popover-foreground: oklch(0.947 0.011 63.4);
   --primary: oklch(0.812 0.15 69.5);
   --primary-foreground: oklch(0.215 0.02 50);
-  --secondary: oklch(0.29 0.014 52);
+  --secondary: oklch(0.33 0.026 52);
   --secondary-foreground: oklch(0.947 0.011 63.4);
-  --muted: oklch(0.278 0.012 52);
+  --muted: oklch(0.268 0.012 52);
   --muted-foreground: oklch(0.715 0.02 60);
   --accent: oklch(0.31 0.02 50);
   --accent-foreground: oklch(0.947 0.011 63.4);

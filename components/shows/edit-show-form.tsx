@@ -252,7 +252,7 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
           {ratings.map(([label, value, onChange]) => (
             <div key={label} className="flex flex-col gap-1.5">
               <span className="text-sm font-medium">{label}</span>
-              <StarRating value={value} onChange={onChange} />
+              <StarRating value={value} onChange={onChange} label={label} />
             </div>
           ))}
         </div>

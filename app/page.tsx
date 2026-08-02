@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Ticket, TicketBody, TicketTear, TicketStub } from "@/components/ui/ticket"
 import { Wordmark } from "@/components/brand/wordmark"
 import { BookOpen, ListMusic, SlidersHorizontal, Users, Star } from "lucide-react"
@@ -81,10 +80,9 @@ function SampleTicket() {
           <span className="font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
             Highlights
           </span>
-          <div className="flex flex-wrap gap-1.5">
-            <Badge variant="secondary" className="text-xs">Storm</Badge>
-            <Badge variant="secondary" className="text-xs">Sleep</Badge>
-          </div>
+          <p className="font-mono text-xs leading-relaxed tracking-[0.08em] uppercase">
+            Storm · Sleep
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
@@ -170,7 +168,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <p className="font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase">
-              Free · No card · Setlists via Setlist.fm
+              Setlists via Setlist.fm
             </p>
           </div>
 
@@ -180,7 +178,7 @@ export default function LandingPage() {
         </section>
 
         {/* What's in the box */}
-        <section className="border-y bg-secondary/60">
+        <section className="border-y bg-secondary/40">
           <dl className="mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
             {trackables.map((t) => (
               <div key={t.term} className="flex flex-col gap-1.5">
@@ -264,7 +262,7 @@ export default function LandingPage() {
             </p>
             <Link
               href="/register"
-              className="font-heading mt-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold tracking-[-0.01em] text-primary-foreground uppercase transition-transform hover:-translate-y-0.5"
+              className={buttonVariants({ size: "lg", className: "mt-2" })}
             >
               Create your Tourbook
             </Link>

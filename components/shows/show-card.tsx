@@ -1,7 +1,6 @@
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Ticket, TicketBody, TicketTear, TicketStub } from "@/components/ui/ticket"
 import { StarRating } from "@/components/shows/star-rating"
 import { ShowPhoto } from "@/components/shows/show-photo"
@@ -114,13 +113,9 @@ export function ShowCard({ show }: ShowCardProps) {
             <span className="font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
               Highlights
             </span>
-            <div className="flex flex-wrap gap-1.5">
-              {highlightedSongs.map((song) => (
-                <Badge key={song.id} variant="secondary" className="max-w-75 text-xs">
-                  <span className="min-w-0 truncate">{song.song_name}</span>
-                </Badge>
-              ))}
-            </div>
+            <p className="font-mono text-xs leading-relaxed tracking-[0.08em] uppercase">
+              {highlightedSongs.map((song) => song.song_name).join(" · ")}
+            </p>
           </div>
         )}
 
@@ -149,7 +144,7 @@ export function ShowCard({ show }: ShowCardProps) {
           {totalSongs > 0 && ` · ${totalSongs} ${totalSongs === 1 ? "song" : "songs"}`}
         </span>
         {show.overall_rating && (
-          <StarRating value={show.overall_rating} readonly size="sm" />
+          <StarRating value={show.overall_rating} readonly size="sm" label="Overall" />
         )}
       </TicketStub>
     </Ticket>
