@@ -14,7 +14,6 @@ interface UserResult {
   id: string
   username: string
   display_name: string | null
-  avatar_url: string | null
   bio: string | null
 }
 
@@ -50,7 +49,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
     }
     const { data } = await supabase
       .from("profiles")
-      .select("id, username, display_name, avatar_url, bio")
+      .select("id, username, display_name, bio")
       .or(`username.ilike.%${trimmed}%`)
       .eq("is_public", true)
       .neq("id", currentUserId)
@@ -107,7 +106,6 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
                   key={user.id}
                   username={user.username}
                   displayName={user.display_name}
-                  avatarUrl={user.avatar_url}
                   primary={
                     <Link href={`/profile/${user.username}`} className="hover:underline">
                       @{user.username}

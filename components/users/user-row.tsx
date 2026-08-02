@@ -1,13 +1,12 @@
 import * as React from "react"
 import Link from "next/link"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { cn, userAvatarGradient, getInitials } from "@/lib/utils"
 
 interface UserRowProps {
   username: string
   displayName?: string | null
-  avatarUrl?: string | null
   /** Primary line. Defaults to the display name, falling back to @username. */
   primary?: React.ReactNode
   /** Secondary line of prose, e.g. a bio or a handle. */
@@ -28,7 +27,6 @@ interface UserRowProps {
 export function UserRow({
   username,
   displayName,
-  avatarUrl,
   primary,
   secondary,
   meta,
@@ -42,7 +40,6 @@ export function UserRow({
     <div className={cn("flex items-center gap-3 px-5 py-4", className)}>
       <Link href={href} className="shrink-0" tabIndex={-1} aria-hidden="true">
         <Avatar className="size-10">
-          <AvatarImage src={avatarUrl ?? undefined} />
           <AvatarFallback style={userAvatarGradient(username)}>
             {initials}
           </AvatarFallback>

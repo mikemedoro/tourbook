@@ -12,7 +12,6 @@ type NotificationRow = {
     id: string
     username: string
     display_name: string | null
-    avatar_url: string | null
   } | null
 }
 
@@ -26,7 +25,7 @@ export default async function NotificationsPage() {
 
   const { data: rawNotifications } = await supabase
     .from("notifications")
-    .select("id, type, read, created_at, profiles!actor_id(id, username, display_name, avatar_url)")
+    .select("id, type, read, created_at, profiles!actor_id(id, username, display_name)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .limit(50)

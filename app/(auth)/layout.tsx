@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Wordmark } from "@/components/brand/wordmark"
 
-export const dynamic = 'force-dynamic'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

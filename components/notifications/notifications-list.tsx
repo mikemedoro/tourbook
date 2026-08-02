@@ -19,7 +19,6 @@ type NotificationItem = {
     id: string
     username: string
     display_name: string | null
-    avatar_url: string | null
   }
   isFollowingBack: boolean
 }
@@ -60,7 +59,6 @@ export function NotificationsList({ notifications }: NotificationsListProps) {
               key={n.id}
               username={n.actor.username}
               displayName={n.actor.display_name}
-              avatarUrl={n.actor.avatar_url}
               className={!n.read ? "bg-primary/5" : undefined}
               primary={
                 <>

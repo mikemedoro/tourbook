@@ -39,7 +39,7 @@ export async function loadMoreFeedShows(
 
   const { data } = await supabase
     .from("shows")
-    .select("*, setlist_songs(*), show_photos(*), profiles(username, display_name, avatar_url)")
+    .select("*, setlist_songs(*), show_photos(*), profiles(username, display_name)")
     .in("user_id", feedUserIds)
     .eq("is_public", true)
     .order("show_date", { ascending: false })

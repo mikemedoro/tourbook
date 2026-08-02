@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import { PlusCircle, LogOut, User, Settings, Search, Bell } from "lucide-react"
 import { Wordmark } from "@/components/brand/wordmark"
 import { buttonVariants } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +21,6 @@ interface NavbarProps {
   user: {
     username: string
     display_name: string | null
-    avatar_url: string | null
   } | null
   unreadNotifications?: number
 }
@@ -93,7 +92,6 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
         <DropdownMenu>
           <DropdownMenuTrigger className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar_url ?? undefined} />
               <AvatarFallback className="text-xs" style={user ? userAvatarGradient(user.username) : undefined}>{initials}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>

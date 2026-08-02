@@ -1,6 +1,6 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { FollowButton } from "@/components/follows/follow-button"
@@ -28,7 +28,6 @@ export function ProfileHeader({
   return (
     <div className="flex items-start gap-4">
       <Avatar className="size-16">
-        <AvatarImage src={profile.avatar_url ?? undefined} />
         <AvatarFallback className="text-xl" style={userAvatarGradient(profile.username)}>
           {initials}
         </AvatarFallback>

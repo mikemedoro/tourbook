@@ -9,7 +9,7 @@ import {
 import { FriendsList } from "@/components/profile/friends-list"
 import { Profile } from "@/types/database"
 
-type FriendProfile = Pick<Profile, "id" | "username" | "display_name" | "avatar_url">
+type FriendProfile = Pick<Profile, "id" | "username" | "display_name">
 
 interface FriendsDialogProps {
   following: FriendProfile[]

@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/layout/navbar"
 
-export const dynamic = 'force-dynamic'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -14,7 +13,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const { data: profile, } = await supabase
     .from("profiles")
-    .select("username, display_name, avatar_url")
+    .select("username, display_name")
     .eq("id", user.id)
     .single()
 

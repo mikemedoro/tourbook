@@ -86,11 +86,11 @@ export default async function ProfilePage({ params }: Props) {
         : Promise.resolve({ data: null }),
       supabase
         .from("follows")
-        .select("profiles!following_id(id, username, display_name, avatar_url)")
+        .select("profiles!following_id(id, username, display_name)")
         .eq("follower_id", profile.id),
       supabase
         .from("follows")
-        .select("profiles!follower_id(id, username, display_name, avatar_url)")
+        .select("profiles!follower_id(id, username, display_name)")
         .eq("following_id", profile.id),
     ])
 
@@ -101,7 +101,7 @@ export default async function ProfilePage({ params }: Props) {
   const hasMoreShows = allFirstPage.length > PAGE_SIZE
   const isFollowing = !!(followResult as { data: unknown }).data
   type FollowRelation = {
-    profiles: Pick<Profile, "id" | "username" | "display_name" | "avatar_url"> | null
+    profiles: Pick<Profile, "id" | "username" | "display_name"> | null
   }
   const following = ((rawFollowing as FollowRelation[] | null) ?? [])
     .map((f) => f.profiles)

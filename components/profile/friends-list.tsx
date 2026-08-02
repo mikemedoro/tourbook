@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { UserRow } from "@/components/users/user-row"
 import { Profile } from "@/types/database"
 
-type FriendProfile = Pick<Profile, "id" | "username" | "display_name" | "avatar_url">
+type FriendProfile = Pick<Profile, "id" | "username" | "display_name">
 
 interface FriendsListProps {
   following: FriendProfile[]
@@ -28,7 +28,6 @@ export function FriendsList({ following, followers }: FriendsListProps) {
                 key={p.id}
                 username={p.username}
                 displayName={p.display_name}
-                avatarUrl={p.avatar_url}
                 secondary={p.display_name ? `@${p.username}` : undefined}
               />
             ))}
@@ -46,7 +45,6 @@ export function FriendsList({ following, followers }: FriendsListProps) {
                 key={p.id}
                 username={p.username}
                 displayName={p.display_name}
-                avatarUrl={p.avatar_url}
                 secondary={p.display_name ? `@${p.username}` : undefined}
               />
             ))}

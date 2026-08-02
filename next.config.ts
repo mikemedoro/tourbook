@@ -9,16 +9,6 @@ const nextConfig: NextConfig = {
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
-      {
-        // Google OAuth avatars
-        protocol: "https",
-        hostname: "*.googleusercontent.com",
-      },
-      {
-        // GitHub OAuth avatars
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
     ],
   },
 };
