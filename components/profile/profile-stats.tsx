@@ -25,7 +25,6 @@ export function ProfileStats({
   const stats = [
     { label: "Shows", value: totalShows },
     { label: String(new Date().getFullYear()), value: showsThisYear },
-    { label: "Artists", value: uniqueArtists },
     { label: "Venues", value: uniqueVenues },
     { label: "Cities", value: uniqueCities },
   ]
@@ -33,7 +32,7 @@ export function ProfileStats({
   return (
     <Ticket perforated={false}>
       <TicketBody className="p-0">
-        <dl className="grid grid-cols-2 sm:grid-cols-5">
+        <dl className="grid grid-cols-2 sm:grid-cols-4">
           {stats.map((stat, i) => (
             <div
               key={stat.label}

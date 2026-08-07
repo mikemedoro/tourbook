@@ -142,7 +142,7 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-24 lg:grid-cols-[1.05fr_1fr] lg:py-32">
+        <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-24 lg:grid-cols-[1.05fr_1fr] lg:py-32">
           <div className="flex flex-col items-start gap-6">
             <p className={eyebrow}>A logbook for live music</p>
             <h1 className="font-heading text-5xl leading-[0.92] font-bold tracking-[-0.03em] uppercase sm:text-6xl">
@@ -177,27 +177,44 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* What's in the box */}
-        <section className="border-y bg-secondary/40">
-          <dl className="mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
-            {trackables.map((t) => (
-              <div key={t.term} className="flex flex-col gap-1.5">
-                <dt className="font-heading text-lg font-bold tracking-[-0.02em]">
-                  {t.term}
-                </dt>
-                <dd className="text-sm leading-relaxed text-muted-foreground">
-                  {t.detail}
-                </dd>
-              </div>
-            ))}
-          </dl>
+        {/* Features */}
+        <section className="border-t">
+          <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
+            <div className="flex flex-col gap-3">
+              <p className={eyebrow}>What you get</p>
+              <h2 className="font-heading text-3xl font-bold tracking-[-0.02em] uppercase sm:text-4xl">
+                Built for people who keep the stub
+              </h2>
+            </div>
+
+            <div className="mt-14 grid gap-6 sm:grid-cols-2">
+              {features.map((f) => {
+                const Icon = f.icon
+                return (
+                  <Ticket key={f.title} perforated={false} className="h-full">
+                    <TicketBody className="gap-3 h-full">
+                      <span className="flex size-9 items-center justify-center rounded-lg bg-secondary text-foreground">
+                        <Icon className="size-4.5" />
+                      </span>
+                      <h3 className="font-heading text-lg font-bold tracking-[-0.02em]">
+                        {f.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
+                        {f.body}
+                      </p>
+                    </TicketBody>
+                  </Ticket>
+                )
+              })}
+            </div>
+          </div>
         </section>
 
         {/* How it works */}
-        <section className="mx-auto max-w-5xl px-6 py-24 sm:py-28">
+        <section className="mx-auto max-w-7xl px-6 py-24 pt-0 sm:pb-28">
           <div className="flex flex-col gap-3">
             <p className={eyebrow}>How it works</p>
-            <h2 className="font-heading max-w-2xl text-3xl font-bold tracking-[-0.02em] uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold tracking-[-0.02em] uppercase sm:text-4xl">
               Three minutes on the train home
             </h2>
           </div>
@@ -217,38 +234,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Features */}
-        <section className="border-t">
-          <div className="mx-auto max-w-5xl px-6 py-24 sm:py-28">
-            <div className="flex flex-col gap-3">
-              <p className={eyebrow}>What you get</p>
-              <h2 className="font-heading max-w-2xl text-3xl font-bold tracking-[-0.02em] uppercase sm:text-4xl">
-                Built for people who keep the stub
-              </h2>
-            </div>
-
-            <div className="mt-14 grid gap-6 sm:grid-cols-2">
-              {features.map((f) => {
-                const Icon = f.icon
-                return (
-                  <Ticket key={f.title} perforated={false}>
-                    <TicketBody className="gap-3">
-                      <span className="flex size-9 items-center justify-center rounded-lg bg-secondary text-foreground">
-                        <Icon className="size-4.5" />
-                      </span>
-                      <h3 className="font-heading text-lg font-bold tracking-[-0.02em]">
-                        {f.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-muted-foreground">
-                        {f.body}
-                      </p>
-                    </TicketBody>
-                  </Ticket>
-                )
-              })}
-            </div>
-          </div>
-        </section>
 
         {/* Closing CTA */}
         <section className="border-t bg-foreground">

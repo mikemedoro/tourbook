@@ -17,10 +17,10 @@ export function Wordmark({
   return (
     <span
       className={cn(
-        "font-heading font-semibold text-foreground uppercase",
+        "font-heading tracking-[0.12em] font-bold text-foreground uppercase",
         size === "lg"
-          ? "text-lg tracking-[0.22em]"
-          : "text-[0.9375rem] tracking-[0.2em]",
+          ? "text-lg"
+          : "text-[0.9375rem]",
         className
       )}
     >

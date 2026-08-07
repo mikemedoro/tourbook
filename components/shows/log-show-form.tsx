@@ -284,9 +284,9 @@ export function LogShowForm({ userId }: LogShowFormProps) {
   )
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       {/* Artist */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         <Label>Artist *</Label>
         <ArtistSearch onSelect={handleArtistSelect} />
       </div>
@@ -295,7 +295,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       {selectedArtist && (
         <>
           <Separator />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div>
               <Label>Import from Setlist.fm <span className="text-muted-foreground font-normal">(optional)</span></Label>
               <p className="text-xs text-muted-foreground mt-1">
@@ -311,10 +311,10 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       {selectedArtist && (
         <>
           <Separator />
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             <Label className="text-base">Show details</Label>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="show_date">Date *</Label>
               <Input id="show_date" type="date" {...register("show_date")} />
               {errors.show_date && (
@@ -322,7 +322,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
               )}
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="venue_name">Venue *</Label>
               <Input id="venue_name" placeholder="e.g. Madison Square Garden" {...register("venue_name")} />
               {errors.venue_name && (
@@ -330,21 +330,21 @@ export function LogShowForm({ userId }: LogShowFormProps) {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="venue_city">City *</Label>
                 <Input id="venue_city" placeholder="e.g. New York" {...register("venue_city")} />
                 {errors.venue_city && (
                   <p className="text-destructive text-xs">{errors.venue_city.message}</p>
                 )}
               </div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="venue_state">State / Region</Label>
                 <Input id="venue_state" placeholder="e.g. NY" {...register("venue_state")} />
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="venue_country">Country</Label>
               <Input id="venue_country" placeholder="e.g. United States" {...register("venue_country")} />
             </div>
@@ -356,7 +356,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       {songs.length > 0 && (
         <>
           <Separator />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <Label>Highlight your favorite songs</Label>
             <SongHighlighter
               songs={songs}
@@ -370,10 +370,10 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       <Separator />
 
       {/* Ratings */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
         <Label>Ratings</Label>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Overall</span>
             <StarRating value={overallRating} onChange={setOverallRating} label="Overall" />
@@ -400,7 +400,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       <Separator />
 
       {/* Other acts */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2.5">
         <Label htmlFor="other_acts">Other acts</Label>
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -432,7 +432,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       </div>
 
       {/* Notes */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2.5">
         <Label htmlFor="notes">Notes</Label>
         <Textarea
           id="notes"
@@ -443,7 +443,7 @@ export function LogShowForm({ userId }: LogShowFormProps) {
       </div>
 
       {/* Photos */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2.5">
         <Label htmlFor="photos">Photo</Label>
         <Input
           id="photos"
