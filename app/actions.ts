@@ -80,3 +80,22 @@ export async function loadMoreProfileShows(
     hasMore: shows.length > PAGE_SIZE,
   }
 }
+
+export async function loadMoreDiscoverShows(
+  offset: number
+): Promise<{ shows: ShowWithSongs[]; hasMore: boolean }> {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from("shows")
+    .select("*, setlist_songs(*), show_photos(*), profiles(username, display_name)")
+    .eq("is_public", true)
+    .order("show_date", { ascending: false })
+    .range(offset, offset + PAGE_SIZE)
+
+  const shows = (data as ShowWithSongs[] | null) ?? []
+  return {
+    shows: shows.slice(0, PAGE_SIZE),
+    hasMore: shows.length > PAGE_SIZE,
+  }
+}

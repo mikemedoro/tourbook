@@ -10,16 +10,17 @@ import { ShowWithSongs } from "@/types/database"
 interface FeedListProps {
   initialShows: ShowWithSongs[]
   initialHasMore: boolean
+  loadMore?: (offset: number) => Promise<{ shows: ShowWithSongs[]; hasMore: boolean }>
 }
 
-export function FeedList({ initialShows, initialHasMore }: FeedListProps) {
+export function FeedList({ initialShows, initialHasMore, loadMore = loadMoreFeedShows }: FeedListProps) {
   const [shows, setShows] = useState(initialShows)
   const [hasMore, setHasMore] = useState(initialHasMore)
   const [isPending, startTransition] = useTransition()
 
   function handleLoadMore() {
     startTransition(async () => {
-      const result = await loadMoreFeedShows(shows.length)
+      const result = await loadMore(shows.length)
       setShows((prev) => [...prev, ...result.shows])
       setHasMore(result.hasMore)
     })

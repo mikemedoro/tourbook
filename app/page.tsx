@@ -130,13 +130,18 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col">
       <header className="flex items-center justify-between border-b px-6 py-4">
         <Wordmark />
-        <div className="flex items-center gap-3">
-          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
-            Log in
+        <div className="flex items-center gap-5">
+          <Link href="/discover" className="font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase hover:text-foreground transition-colors">
+            Recent shows
           </Link>
-          <Link href="/register" className={buttonVariants()}>
-            Get started
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+              Log in
+            </Link>
+            <Link href="/register" className={buttonVariants()}>
+              Get started
+            </Link>
+          </div>
         </div>
       </header>
 
