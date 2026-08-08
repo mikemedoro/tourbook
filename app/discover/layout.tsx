@@ -14,7 +14,7 @@ export default function DiscoverLayout({ children }: { children: React.ReactNode
             Log in
           </Link>
           <Link href="/register" className={buttonVariants({ size: "sm" })}>
-            Sign up free
+            Sign up
           </Link>
         </div>
       </header>

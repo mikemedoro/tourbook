@@ -30,7 +30,7 @@ async function DiscoverFeed() {
         description="Be the first to log a show."
         action={
           <Link href="/register" className={buttonVariants()}>
-            Sign up free
+            Sign up
           </Link>
         }
       />
@@ -52,11 +52,6 @@ export default function DiscoverPage() {
       <PageHeader
         title="Recent shows"
         description="What people have been to, most recent first."
-        action={
-          <Link href="/register" className={buttonVariants()}>
-            Sign up free
-          </Link>
-        }
       />
 
       <Suspense fallback={<FeedSkeleton />}>

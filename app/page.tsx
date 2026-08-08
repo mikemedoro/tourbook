@@ -47,16 +47,6 @@ const features = [
   },
 ]
 
-/* Plain statements of what the app does. The previous version dressed these up
-   as metrics ("∞ shows logged", "Cost: Free"), which reads as filler where real
-   usage numbers would go. */
-const trackables = [
-  { term: "Setlists", detail: "Auto-filled from Setlist.fm, song by song" },
-  { term: "Four ratings", detail: "Sound, setlist, venue and crowd, scored separately" },
-  { term: "Photos", detail: "One shot per show, kept at full size" },
-  { term: "Free", detail: "You don't need a card and there's no paid tier" },
-]
-
 /* A real ticket rendered from the same primitives as the feed, not a mockup. */
 function SampleTicket() {
   return (
@@ -135,11 +125,8 @@ export default function LandingPage() {
             Recent shows
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+            <Link href="/login" className={buttonVariants({ variant: "default" })}>
               Log in
-            </Link>
-            <Link href="/register" className={buttonVariants()}>
-              Get started
             </Link>
           </div>
         </div>
