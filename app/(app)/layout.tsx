@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/layout/navbar"
+import { MobileTabBar } from "@/components/layout/mobile-tab-bar"
 
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +27,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar user={profile} unreadNotifications={unreadNotifications ?? 0} />
-      <main className="flex-1 container max-w-4xl mx-auto px-5 py-14 sm:px-6 sm:py-20">{children}</main>
+      <main className="flex-1 container max-w-4xl mx-auto px-5 pt-14 pb-28 sm:px-6 sm:py-20">{children}</main>
+      <MobileTabBar unreadNotifications={unreadNotifications ?? 0} />
     </div>
   )
 }

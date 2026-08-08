@@ -46,7 +46,7 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
           <Wordmark />
         </Link>
 
-        <nav className="flex items-center gap-4">
+        <nav className="hidden items-center gap-4 sm:flex">
           {[{ href: "/feed", label: "Feed" }].map((item) => {
             const active = pathname === item.href
             return (
@@ -69,7 +69,7 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center">
+        <div className="hidden items-center sm:flex">
           <Link href="/find" aria-label="Find people" className={buttonVariants({ variant: "ghost", size: "sm" })} title="Find people">
             <Search className="h-4 w-4" />
           </Link>
@@ -84,7 +84,7 @@ export function Navbar({ user, unreadNotifications = 0 }: NavbarProps) {
             </span>
           </Link>
         </div>
-        <Link href="/log-show" className={buttonVariants({ size: "sm" })}>
+        <Link href="/log-show" className={cn(buttonVariants({ size: "sm" }), "hidden sm:inline-flex")}>
           <PlusCircle className="h-4 w-4 sm:mr-1.5" />
           <span className="max-sm:sr-only">Log show</span>
         </Link>
