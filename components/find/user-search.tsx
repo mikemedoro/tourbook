@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
-import { Search } from "lucide-react"
+import { Search, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { EmptyState } from "@/components/ui/empty-state"
 import { Ticket, TicketBody } from "@/components/ui/ticket"
@@ -27,6 +27,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
   const [results, setResults] = useState<UserResult[]>([])
   const [following, setFollowing] = useState<Set<string>>(new Set())
   const [searched, setSearched] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // Load existing follows on mount
   useEffect(() => {
@@ -47,6 +48,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
       setSearched(false)
       return
     }
+    setLoading(true)
     const { data } = await supabase
       .from("profiles")
       .select("id, username, display_name, bio")
@@ -57,6 +59,7 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
 
     setResults((data as UserResult[]) ?? [])
     setSearched(true)
+    setLoading(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserId])
 
@@ -88,6 +91,9 @@ export function UserSearch({ currentUserId }: UserSearchProps) {
           onChange={(e) => setQuery(e.target.value)}
           autoFocus
         />
+        {loading && (
+          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+        )}
       </div>
 
       {searched && results.length === 0 && (

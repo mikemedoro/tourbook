@@ -283,17 +283,18 @@ export function EditShowForm({ show, username }: EditShowFormProps) {
             {...register("other_acts")}
           />
           {show.setlist_id && (
-            <button
+            <Button
               type="button"
-              onClick={fetchOtherActs}
+              variant="outline"
+              size="icon"
               disabled={loadingOtherActs}
-              className="shrink-0 flex items-center justify-center rounded-md border px-2.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+              onClick={fetchOtherActs}
               title="Fetch other acts from Setlist.fm"
             >
               {loadingOtherActs
                 ? <Loader2 className="h-4 w-4 animate-spin" />
                 : <RefreshCw className="h-4 w-4" />}
-            </button>
+            </Button>
           )}
         </div>
       </div>

@@ -96,7 +96,7 @@ export function UsernameForm({ defaultUsername }: { defaultUsername: string }) {
           <p className="text-destructive text-xs">{errors.username.message}</p>
         )}
       </div>
-      <Button type="submit" disabled={saving} className="self-start">
+      <Button type="submit" disabled={saving} className="w-full">
         {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
         Continue
       </Button>

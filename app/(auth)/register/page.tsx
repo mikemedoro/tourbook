@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -93,6 +94,7 @@ export default function RegisterPage() {
         onClick={signUpWithGoogle}
         disabled={googleLoading}
       >
+        {googleLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {googleLoading ? "Redirecting…" : "Continue with Google"}
       </Button>
 
@@ -172,6 +174,7 @@ export default function RegisterPage() {
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {loading ? "Creating account…" : "Create account"}
         </Button>
       </form>
