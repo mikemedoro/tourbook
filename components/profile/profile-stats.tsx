@@ -43,8 +43,6 @@ export function ProfileStats({
                 i > 1 && "border-t",
                 // Five across: interior rules only
                 "sm:border-t-0 sm:not-first:border-l",
-                // Last cell fills the final mobile row
-                i === stats.length - 1 && "max-sm:col-span-2 max-sm:border-l-0"
               )}
             >
               <dd className="font-heading text-4xl leading-none font-bold tracking-[-0.03em] tabular-nums sm:text-5xl">
